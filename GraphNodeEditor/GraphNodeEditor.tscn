@@ -27,6 +27,9 @@ margin_right = 592.083
 margin_bottom = 334.769
 texture = ExtResource( 2 )
 script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="TextureRect2" type="TextureRect" parent="Board"]
 margin_left = 718.126
