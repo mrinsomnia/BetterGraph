@@ -43,9 +43,13 @@ func HScrolling()->void:
 func VScrolling()->void:
 	board.rect_position.y = -vScroll.value
 
-func AddUnit(unit:Node)->void:
+func AddUnit(unit:Control, pos:Vector2 = Vector2.ZERO)->void:
+	board.add_child(unit)
+	unit.rect_position
 	unitDictionary[unit.name] = unit
 	unitList.append(unit)
+	unit.connect("_exit_tree", self, "RemoveUnit", [unit])
+	unit.connect("UnitChanged", owner, "UnitChanged")
 
 func RemoveUnit(unit:Node)->void:
 # warning-ignore:return_value_discarded
@@ -59,6 +63,8 @@ func MoveUnits(offset:Vector2)->void:
 		unit.rect_position += offset
 
 func UnitChanged(pos:Vector2, size:Vector2)->void:
+	### OPTIMIZE SHRINK & EXTEND
+	### NOW ONLY EXTENDS
 	if pos.x + size.x > board.rect_size.x:
 		board.rect_size.x = pos.x + size.x
 	
@@ -72,6 +78,5 @@ func UnitChanged(pos:Vector2, size:Vector2)->void:
 	if pos.y < 0.0:
 		board.rect_size.y += -pos.y
 		MoveUnits(Vector2(0.0, -pos.y))
-	
 	
 	UpdateScrollBars()
