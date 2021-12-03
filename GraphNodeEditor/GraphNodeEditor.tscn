@@ -15,6 +15,7 @@ __meta__ = {
 [node name="Board" type="Panel" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -24,6 +25,22 @@ margin_left = 528.083
 margin_top = 270.769
 margin_right = 592.083
 margin_bottom = 334.769
+texture = ExtResource( 2 )
+script = ExtResource( 3 )
+
+[node name="TextureRect2" type="TextureRect" parent="Board"]
+margin_left = 718.126
+margin_top = 364.949
+margin_right = 782.126
+margin_bottom = 428.949
+texture = ExtResource( 2 )
+script = ExtResource( 3 )
+
+[node name="TextureRect3" type="TextureRect" parent="Board"]
+margin_left = 418.766
+margin_top = 496.129
+margin_right = 482.766
+margin_bottom = 560.129
 texture = ExtResource( 2 )
 script = ExtResource( 3 )
 
