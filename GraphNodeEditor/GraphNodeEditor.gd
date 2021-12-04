@@ -1,4 +1,5 @@
 extends Control
+class_name GraphNodeEditor
 
 onready var hScroll: = $HScrollBar
 onready var vScroll: = $VScrollBar
@@ -8,12 +9,18 @@ var unitDictionary:Dictionary
 var unitList:Array
 var isDragged: = false
 
+var unitScene:PackedScene = preload("res://GraphUnit/GraphUnit.tscn")
+
 func _ready()->void:
 # warning-ignore:return_value_discarded
 	hScroll.connect("scrolling", self, "HScrolling")
 # warning-ignore:return_value_discarded
 	vScroll.connect("scrolling", self, "VScrolling")
 	UpdateScrollBars()
+	
+	for i in 3:
+		var inst = unitScene.instance()
+		AddUnit(inst, board.rect_size * 0.5 * Vector2(randf(), randf()))
 
 func _gui_input(event:InputEvent)->void:
 	if event is InputEventMouseButton:
@@ -43,15 +50,17 @@ func HScrolling()->void:
 func VScrolling()->void:
 	board.rect_position.y = -vScroll.value
 
-func AddUnit(unit:Control, pos:Vector2 = Vector2.ZERO)->void:
+func AddUnit(unit:GraphUnit, pos:Vector2 = Vector2.ZERO)->void:
 	board.add_child(unit)
-	unit.rect_position
+	unit.rect_position = pos
 	unitDictionary[unit.name] = unit
 	unitList.append(unit)
-	unit.connect("_exit_tree", self, "RemoveUnit", [unit])
-	unit.connect("UnitChanged", owner, "UnitChanged")
+# warning-ignore:return_value_discarded
+	unit.connect("_exit_tree", self, "RemoveUnit", [unit]) #sumting wong
+# warning-ignore:return_value_discarded
+	unit.connect("UnitChanged", self, "UnitChanged")
 
-func RemoveUnit(unit:Node)->void:
+func RemoveUnit(unit:GraphUnit)->void:
 # warning-ignore:return_value_discarded
 	unitDictionary.erase(unit.name)
 	unitList.clear()

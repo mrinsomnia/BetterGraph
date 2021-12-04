@@ -8,9 +8,20 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Control",
+"class": "GraphNodeEditor",
+"language": "GDScript",
+"path": "res://GraphNodeEditor/GraphNodeEditor.gd"
+}, {
+"base": "PanelContainer",
+"class": "GraphUnit",
+"language": "GDScript",
+"path": "res://GraphUnit/GraphUnit.gd"
+} ]
 _global_script_class_icons={
-
+"GraphNodeEditor": "",
+"GraphUnit": ""
 }
 
 [application]

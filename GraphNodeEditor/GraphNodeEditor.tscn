@@ -1,8 +1,6 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=2 format=2]
 
 [ext_resource path="res://GraphNodeEditor/GraphNodeEditor.gd" type="Script" id=1]
-[ext_resource path="res://icon.png" type="Texture" id=2]
-[ext_resource path="res://GraphUnit/GraphUnit.gd" type="Script" id=3]
 
 [node name="GraphNodeEditor" type="Control"]
 anchor_right = 1.0
@@ -19,33 +17,6 @@ mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="TextureRect" type="TextureRect" parent="Board"]
-margin_left = 528.083
-margin_top = 270.769
-margin_right = 592.083
-margin_bottom = 334.769
-texture = ExtResource( 2 )
-script = ExtResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="TextureRect2" type="TextureRect" parent="Board"]
-margin_left = 718.126
-margin_top = 364.949
-margin_right = 782.126
-margin_bottom = 428.949
-texture = ExtResource( 2 )
-script = ExtResource( 3 )
-
-[node name="TextureRect3" type="TextureRect" parent="Board"]
-margin_left = 418.766
-margin_top = 496.129
-margin_right = 482.766
-margin_bottom = 560.129
-texture = ExtResource( 2 )
-script = ExtResource( 3 )
 
 [node name="VScrollBar" type="VScrollBar" parent="."]
 anchor_left = 1.0
