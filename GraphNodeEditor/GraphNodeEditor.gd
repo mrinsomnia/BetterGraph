@@ -5,11 +5,14 @@ onready var hScroll: = $HScrollBar
 onready var vScroll: = $VScrollBar
 onready var board: = $Board
 
+var unitScene:PackedScene = preload("res://GraphUnit/GraphUnit.tscn")
 var unitDictionary:Dictionary
 var unitList:Array
 var isDragged: = false
+var inputSelected:Dictionary
+var outputSelected:Dictionary
+var connections:Array
 
-var unitScene:PackedScene = preload("res://GraphUnit/GraphUnit.tscn")
 
 func _ready()->void:
 # warning-ignore:return_value_discarded
@@ -59,6 +62,10 @@ func AddUnit(unit:GraphUnit, pos:Vector2 = Vector2.ZERO)->void:
 	unit.connect("tree_exited", self, "RemoveUnit", [unit])
 # warning-ignore:return_value_discarded
 	unit.connect("UnitChanged", self, "UnitChanged")
+# warning-ignore:return_value_discarded
+	unit.connect("InputPressed", self, "InputPressed")
+# warning-ignore:return_value_discarded
+	unit.connect("OutputPressed", self, "OutputPressed")
 
 func RemoveUnit(unit:GraphUnit)->void:
 # warning-ignore:return_value_discarded
@@ -89,3 +96,32 @@ func UnitChanged(pos:Vector2, size:Vector2)->void:
 		MoveUnits(Vector2(0.0, -pos.y))
 	
 	UpdateScrollBars()
+
+func InputPressed(unit:GraphUnit, input:int)->void:
+	if outputSelected.empty():
+		inputSelected["unit"] = unit
+		inputSelected["input"] = input
+	else:
+		var data:Dictionary = {
+			unitOut = outputSelected.unit,
+			output = outputSelected.output,
+			unitIn = unit,
+			input = input
+		}
+		connections.append(data)
+		outputSelected.clear()
+
+func OutputPressed(unit:GraphUnit, output:int)->void:
+	if inputSelected.empty():
+		outputSelected["unit"] = unit
+		outputSelected["output"] = output
+	else:
+		var data:Dictionary = {
+			unitOut = unit,
+			output = output,
+			unitIn = inputSelected.unit,
+			input = inputSelected.output
+		}
+		connections.append(data)
+		inputSelected.clear()
+

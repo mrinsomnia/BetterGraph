@@ -1,9 +1,18 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://UnitConnector/Connector.tscn" type="PackedScene" id=1]
 [ext_resource path="res://GraphUnit/GraphUnit.gd" type="Script" id=2]
 
 [sub_resource type="StyleBoxEmpty" id=1]
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.164706, 0.164706, 0.196078, 1 )
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color( 0, 0, 0, 0.219608 )
+shadow_size = 1
+shadow_offset = Vector2( 2, 2 )
 
 [node name="GraphUnit" type="PanelContainer"]
 margin_right = 28.0
@@ -13,58 +22,26 @@ script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+inputCount = 3
+outputCount = 4
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-margin_right = 112.0
-margin_bottom = 92.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
-margin_right = 20.0
-margin_bottom = 92.0
-size_flags_horizontal = 2
-
-[node name="Connector4" parent="HBoxContainer/VBoxContainer" instance=ExtResource( 1 )]
-margin_right = 20.0
-margin_bottom = 20.0
-
-[node name="Connector5" parent="HBoxContainer/VBoxContainer" instance=ExtResource( 1 )]
-margin_top = 24.0
-margin_right = 20.0
-margin_bottom = 44.0
-
-[node name="Connector6" parent="HBoxContainer/VBoxContainer" instance=ExtResource( 1 )]
-margin_top = 48.0
-margin_right = 20.0
-margin_bottom = 68.0
-
-[node name="Connector7" parent="HBoxContainer/VBoxContainer" instance=ExtResource( 1 )]
-margin_top = 72.0
-margin_right = 20.0
-margin_bottom = 92.0
-
-[node name="Panel" type="Panel" parent="HBoxContainer"]
-margin_left = 24.0
-margin_right = 88.0
+[node name="Panel" type="Panel" parent="."]
+margin_right = 64.0
 margin_bottom = 92.0
 rect_min_size = Vector2( 64, 0 )
 mouse_filter = 2
+custom_styles/panel = SubResource( 2 )
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer"]
-margin_left = 92.0
-margin_right = 112.0
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_right = 64.0
+margin_bottom = 92.0
+
+[node name="InputParent" type="VBoxContainer" parent="HBoxContainer"]
+margin_bottom = 92.0
+size_flags_horizontal = 2
+
+[node name="OutputParent" type="VBoxContainer" parent="HBoxContainer"]
+margin_left = 64.0
+margin_right = 64.0
 margin_bottom = 92.0
 size_flags_horizontal = 10
-
-[node name="Connector" parent="HBoxContainer/VBoxContainer2" instance=ExtResource( 1 )]
-margin_right = 20.0
-margin_bottom = 28.0
-
-[node name="Connector2" parent="HBoxContainer/VBoxContainer2" instance=ExtResource( 1 )]
-margin_top = 32.0
-margin_right = 20.0
-margin_bottom = 60.0
-
-[node name="Connector3" parent="HBoxContainer/VBoxContainer2" instance=ExtResource( 1 )]
-margin_top = 64.0
-margin_right = 20.0
-margin_bottom = 92.0
