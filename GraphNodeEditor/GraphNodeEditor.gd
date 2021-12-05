@@ -73,6 +73,7 @@ func RemoveUnit(unit:GraphUnit)->void:
 	unitList.clear()
 	for k in unitDictionary.keys():
 		unitList.append(unitDictionary[k])
+	#TO-DO: check if unit has active connections
 
 func MoveUnits(offset:Vector2)->void:
 	for unit in unitList:
@@ -102,13 +103,9 @@ func InputPressed(unit:GraphUnit, input:int)->void:
 		inputSelected["unit"] = unit
 		inputSelected["input"] = input
 	else:
-		var data:Dictionary = {
-			unitOut = outputSelected.unit,
-			output = outputSelected.output,
-			unitIn = unit,
-			input = input
-		}
-		connections.append(data)
+		if outputSelected.unit == unit:
+			return
+		EstablishConnection(outputSelected.unit , unit, outputSelected.output , input)
 		outputSelected.clear()
 
 func OutputPressed(unit:GraphUnit, output:int)->void:
@@ -116,12 +113,17 @@ func OutputPressed(unit:GraphUnit, output:int)->void:
 		outputSelected["unit"] = unit
 		outputSelected["output"] = output
 	else:
-		var data:Dictionary = {
-			unitOut = unit,
-			output = output,
-			unitIn = inputSelected.unit,
-			input = inputSelected.output
-		}
-		connections.append(data)
+		if inputSelected.unit == unit:
+			return
+		EstablishConnection(unit , inputSelected.unit, output ,inputSelected.input)
 		inputSelected.clear()
 
+func EstablishConnection(unitOut:GraphUnit, unitIn:GraphUnit, output:int, input:int)->void:
+	var data:Dictionary = {
+		unitOut = unitOut,
+		output = output,
+		unitIn = unitIn,
+		input = input
+	}
+	connections.append(data)
+	unitOut.Connected(data)

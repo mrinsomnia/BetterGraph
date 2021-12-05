@@ -15,6 +15,7 @@ var connectorScene:PackedScene = preload("res://UnitConnector/Connector.tscn")
 var isDragged: = false
 var inputs:Array = []
 var outputs:Array = []
+var connections:Array = []
 
 func SetInputs(value:int)->void:
 	if !is_inside_tree():
@@ -72,3 +73,13 @@ func InputPressed(_connector:Button, index:int)->void:
 
 func OutputPressed(_connector:Button, index:int)->void:
 	emit_signal("OutputPressed", self, index)
+
+func Connected(data:Dictionary)->void:
+	connections.append(data)
+	update()
+	print(data)
+
+func _draw()->void:
+#	if connections.size() > 0:
+#		draw_line(self.rect_position, connections[0].rect_position, Color.bisque, 1)
+	pass
