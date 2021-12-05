@@ -3,7 +3,6 @@ class_name GraphUnit
 
 signal UnitChanged
 
-var editor:Node
 var isDragged: = false
 
 
@@ -17,3 +16,4 @@ func _gui_input(event:InputEvent)->void:
 	elif event is InputEventMouseMotion && isDragged:
 		rect_position += event.relative
 		emit_signal("UnitChanged", rect_position, rect_size)
+

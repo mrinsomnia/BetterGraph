@@ -56,7 +56,7 @@ func AddUnit(unit:GraphUnit, pos:Vector2 = Vector2.ZERO)->void:
 	unitDictionary[unit.name] = unit
 	unitList.append(unit)
 # warning-ignore:return_value_discarded
-	unit.connect("_exit_tree", self, "RemoveUnit", [unit]) #sumting wong
+	unit.connect("tree_exited", self, "RemoveUnit", [unit])
 # warning-ignore:return_value_discarded
 	unit.connect("UnitChanged", self, "UnitChanged")
 
