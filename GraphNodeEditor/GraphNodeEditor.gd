@@ -4,6 +4,7 @@ class_name GraphNodeEditor
 onready var hScroll: = $HScrollBar
 onready var vScroll: = $VScrollBar
 onready var board: = $Board
+onready var topLayer: = $TopLayer
 
 var unitScene:PackedScene = preload("res://GraphUnit/GraphUnit.tscn")
 var unitDictionary:Dictionary
@@ -49,9 +50,11 @@ func UpdateScrollBars()->void:
 
 func HScrolling()->void:
 	board.rect_position.x = -hScroll.value
+	topLayer.rect_position.x = -hScroll.value
 
 func VScrolling()->void:
 	board.rect_position.y = -vScroll.value
+	topLayer.rect_position.y = -vScroll.value
 
 func AddUnit(unit:GraphUnit, pos:Vector2 = Vector2.ZERO)->void:
 	board.add_child(unit)
@@ -97,6 +100,7 @@ func UnitChanged(pos:Vector2, size:Vector2)->void:
 		MoveUnits(Vector2(0.0, -pos.y))
 	
 	UpdateScrollBars()
+	topLayer.update()
 
 func InputPressed(unit:GraphUnit, input:int)->void:
 	if outputSelected.empty():
@@ -127,3 +131,4 @@ func EstablishConnection(unitOut:GraphUnit, unitIn:GraphUnit, output:int, input:
 	}
 	connections.append(data)
 	unitOut.Connected(data)
+	topLayer.update()

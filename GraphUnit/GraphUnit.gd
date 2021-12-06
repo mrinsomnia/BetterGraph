@@ -28,6 +28,7 @@ func SetInputs(value:int)->void:
 # warning-ignore:return_value_discarded
 			inst.connect("pressed", self, "InputPressed", [inst, inputs.size()])
 			inputs.append(inst)
+			inst.modulate = Color(randf(), randf(), randf())	############# TEST
 	elif inputCount > value:
 		for i in (inputCount - value):
 			inputs.pop_back().queue_free()
@@ -44,6 +45,7 @@ func SetOutputs(value:int)->void:
 # warning-ignore:return_value_discarded
 			inst.connect("pressed", self, "OutputPressed", [inst, outputs.size()])
 			outputs.append(inst)
+			inst.modulate = Color(randf(), randf(), randf())	############# TEST
 	elif outputCount > value:
 		for i in (outputCount - value):
 			outputs.pop_back().queue_free()
