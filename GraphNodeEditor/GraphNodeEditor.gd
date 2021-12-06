@@ -1,12 +1,19 @@
 extends Control
+class_name GraphNodeEditor
 
 onready var hScroll: = $HScrollBar
 onready var vScroll: = $VScrollBar
 onready var board: = $Board
+onready var topLayer: = $TopLayer
 
+var unitScene:PackedScene = preload("res://GraphUnit/GraphUnit.tscn")
 var unitDictionary:Dictionary
 var unitList:Array
 var isDragged: = false
+var inputSelected:Dictionary
+var outputSelected:Dictionary
+var connections:Array
+
 
 func _ready()->void:
 # warning-ignore:return_value_discarded
@@ -14,6 +21,10 @@ func _ready()->void:
 # warning-ignore:return_value_discarded
 	vScroll.connect("scrolling", self, "VScrolling")
 	UpdateScrollBars()
+	
+	for i in 3:
+		var inst = unitScene.instance()
+		AddUnit(inst, board.rect_size * 0.5 * Vector2(randf(), randf()))
 
 func _gui_input(event:InputEvent)->void:
 	if event is InputEventMouseButton:
@@ -39,24 +50,33 @@ func UpdateScrollBars()->void:
 
 func HScrolling()->void:
 	board.rect_position.x = -hScroll.value
+	topLayer.rect_position.x = -hScroll.value
 
 func VScrolling()->void:
 	board.rect_position.y = -vScroll.value
+	topLayer.rect_position.y = -vScroll.value
 
-func AddUnit(unit:Control, pos:Vector2 = Vector2.ZERO)->void:
+func AddUnit(unit:GraphUnit, pos:Vector2 = Vector2.ZERO)->void:
 	board.add_child(unit)
-	unit.rect_position
+	unit.rect_position = pos
 	unitDictionary[unit.name] = unit
 	unitList.append(unit)
-	unit.connect("_exit_tree", self, "RemoveUnit", [unit])
-	unit.connect("UnitChanged", owner, "UnitChanged")
+# warning-ignore:return_value_discarded
+	unit.connect("tree_exited", self, "RemoveUnit", [unit])
+# warning-ignore:return_value_discarded
+	unit.connect("UnitChanged", self, "UnitChanged")
+# warning-ignore:return_value_discarded
+	unit.connect("InputPressed", self, "InputPressed")
+# warning-ignore:return_value_discarded
+	unit.connect("OutputPressed", self, "OutputPressed")
 
-func RemoveUnit(unit:Node)->void:
+func RemoveUnit(unit:GraphUnit)->void:
 # warning-ignore:return_value_discarded
 	unitDictionary.erase(unit.name)
 	unitList.clear()
 	for k in unitDictionary.keys():
 		unitList.append(unitDictionary[k])
+	#TO-DO: check if unit has active connections
 
 func MoveUnits(offset:Vector2)->void:
 	for unit in unitList:
@@ -80,3 +100,35 @@ func UnitChanged(pos:Vector2, size:Vector2)->void:
 		MoveUnits(Vector2(0.0, -pos.y))
 	
 	UpdateScrollBars()
+	topLayer.update()
+
+func InputPressed(unit:GraphUnit, input:int)->void:
+	if outputSelected.empty():
+		inputSelected["unit"] = unit
+		inputSelected["input"] = input
+	else:
+		if outputSelected.unit == unit:
+			return
+		EstablishConnection(outputSelected.unit , unit, outputSelected.output , input)
+		outputSelected.clear()
+
+func OutputPressed(unit:GraphUnit, output:int)->void:
+	if inputSelected.empty():
+		outputSelected["unit"] = unit
+		outputSelected["output"] = output
+	else:
+		if inputSelected.unit == unit:
+			return
+		EstablishConnection(unit , inputSelected.unit, output ,inputSelected.input)
+		inputSelected.clear()
+
+func EstablishConnection(unitOut:GraphUnit, unitIn:GraphUnit, output:int, input:int)->void:
+	var data:Dictionary = {
+		unitOut = unitOut,
+		output = output,
+		unitIn = unitIn,
+		input = input
+	}
+	connections.append(data)
+	unitOut.Connected(data)
+	topLayer.update()
