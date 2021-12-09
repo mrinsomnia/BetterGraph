@@ -23,6 +23,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="TopLayer" type="Control" parent="."]
+mouse_filter = 2
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="VScrollBar" type="VScrollBar" parent="."]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -39,13 +46,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = -12.0
 margin_right = -12.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="TopLayer" type="Control" parent="."]
-mouse_filter = 2
-script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
