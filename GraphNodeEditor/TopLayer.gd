@@ -14,17 +14,19 @@ func _draw()->void:
 			input.modulate
 		)
 
+# warning-ignore:unused_argument
 func _draw_connection_line(from:Vector2, to:Vector2, colorFrom:Color, colorTo:Color)->void:
 	draw_line(from, to, colorFrom)
 
 
 func draw_line_bezier_cubic(startPos:Vector2, endPos:Vector2, colorFrom:Color, colorTo:Color)->void:
 	var previous:Vector2 = startPos
+# warning-ignore:unassigned_variable
 	var current:Vector2
 	for i in BEZIER_LINE_DIVISIONS:
 		current.y = EaseCubicInOut(i, startPos.y, endPos.y - startPos.y, BEZIER_LINE_DIVISIONS)
 		current.x = previous.x + (endPos.x - startPos.x) / BEZIER_LINE_DIVISIONS
-		draw_line(previous, current, colorFrom.linear_interpolate(colorTo, step * i))
+		draw_line(previous, current, colorFrom.linear_interpolate(colorTo, step * i), 1, true)
 		previous = current
 
 static func EaseCubicInOut(t:float, b:float, c:float, d:float)->float:

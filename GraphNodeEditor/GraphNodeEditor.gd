@@ -109,8 +109,8 @@ func InputPressed(unit:GraphUnit, input:int)->void:
 	else:
 		if outputSelected.unit == unit:
 			return
-		EstablishConnection(outputSelected.unit , unit, outputSelected.output , input)
-		outputSelected.clear()
+		if EstablishConnection(outputSelected.unit , unit, outputSelected.output , input):
+			outputSelected.clear()
 
 func OutputPressed(unit:GraphUnit, output:int)->void:
 	if inputSelected.empty():
@@ -119,16 +119,19 @@ func OutputPressed(unit:GraphUnit, output:int)->void:
 	else:
 		if inputSelected.unit == unit:
 			return
-		EstablishConnection(unit , inputSelected.unit, output ,inputSelected.input)
-		inputSelected.clear()
+		if EstablishConnection(unit , inputSelected.unit, output ,inputSelected.input):
+			inputSelected.clear()
 
-func EstablishConnection(unitOut:GraphUnit, unitIn:GraphUnit, output:int, input:int)->void:
+func EstablishConnection(unitOut:GraphUnit, unitIn:GraphUnit, output:int, input:int)->bool:
 	var data:Dictionary = {
 		unitOut = unitOut,
 		output = output,
 		unitIn = unitIn,
 		input = input
 	}
+	if !unitOut.ConnectionValidation(data):
+		return false
 	connections.append(data)
 	unitOut.Connected(data)
 	topLayer.update()
+	return true

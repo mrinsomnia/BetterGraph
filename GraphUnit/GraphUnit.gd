@@ -4,6 +4,9 @@ class_name GraphUnit
 signal UnitChanged
 signal InputPressed
 signal OutputPressed
+signal InputDisconnect
+# warning-ignore:unused_signal
+signal OutputDisconnect
 
 export var inputCount:int setget SetInputs
 export var outputCount:int setget SetOutputs
@@ -15,7 +18,7 @@ var connectorScene:PackedScene = preload("res://UnitConnector/Connector.tscn")
 var isDragged: = false
 var inputs:Array = []
 var outputs:Array = []
-var connections:Array = []
+var connectionsOut:Dictionary = {}	#data list array by output key
 
 func SetInputs(value:int)->void:
 	if !is_inside_tree():
@@ -27,6 +30,8 @@ func SetInputs(value:int)->void:
 			inputParent.add_child(inst)
 # warning-ignore:return_value_discarded
 			inst.connect("pressed", self, "InputPressed", [inst, inputs.size()])
+# warning-ignore:return_value_discarded
+			inst.connect("disconnect", self, "InputDisconnected", [inst, inputs.size()])
 			inputs.append(inst)
 			inst.modulate = Color(randf(), randf(), randf())	############# TEST
 	elif inputCount > value:
@@ -44,6 +49,8 @@ func SetOutputs(value:int)->void:
 			outputParent.add_child(inst)
 # warning-ignore:return_value_discarded
 			inst.connect("pressed", self, "OutputPressed", [inst, outputs.size()])
+# warning-ignore:return_value_discarded
+			inst.connect("disconnect", self, "OutputDisconnected", [inst, outputs.size()])
 			outputs.append(inst)
 			inst.modulate = Color(randf(), randf(), randf())	############# TEST
 	elif outputCount > value:
@@ -76,12 +83,28 @@ func InputPressed(_connector:Button, index:int)->void:
 func OutputPressed(_connector:Button, index:int)->void:
 	emit_signal("OutputPressed", self, index)
 
-func Connected(data:Dictionary)->void:
-	connections.append(data)
-	update()
-	print(data)
+func InputDisconnected(_connector:Button, index:int)->void:
+	emit_signal("InputDisconnect", self, index)
 
-func _draw()->void:
-#	if connections.size() > 0:
-#		draw_line(self.rect_position, connections[0].rect_position, Color.bisque, 1)
-	pass
+func OutputDisconnected(_connector:Button, index:int)->void:
+	emit_signal("OutputDisconnect", self, index)
+
+#Check if connection already is existing
+func ConnectionExists(data:Dictionary)->bool:
+	if !connectionsOut.has(str(data.output)):
+		return false
+	else:
+		for entry in connectionsOut[str(data.output)]:
+			if entry.unitIn == data.unitIn && entry.input && data.input:
+				return true
+	return false
+
+func Connected(data:Dictionary)->void:
+	if !connectionsOut.has(str(data.output)):
+		connectionsOut[str(data.output)] = []
+	connectionsOut[str(data.output)].append(data)
+
+# Chance to check if connection is valid
+func ConnectionValidation(data:Dictionary)->bool:
+	return !ConnectionExists(data)
+
