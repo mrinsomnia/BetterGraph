@@ -132,6 +132,6 @@ func EstablishConnection(unitOut:GraphUnit, unitIn:GraphUnit, output:int, input:
 	if !unitOut.ConnectionValidation(data):
 		return false
 	connections.append(data)
-	unitOut.Connected(data)
+	unitOut.ConnectedOut(data)
 	topLayer.update()
 	return true
