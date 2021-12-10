@@ -69,6 +69,8 @@ func AddUnit(unit:GraphUnit, pos:Vector2 = Vector2.ZERO)->void:
 	unit.connect("InputPressed", self, "InputPressed")
 # warning-ignore:return_value_discarded
 	unit.connect("OutputPressed", self, "OutputPressed")
+# warning-ignore:return_value_discarded
+	unit.connect("Disconnect", self, "Disconnect")
 
 func RemoveUnit(unit:GraphUnit)->void:
 # warning-ignore:return_value_discarded
@@ -135,3 +137,13 @@ func EstablishConnection(unitOut:GraphUnit, unitIn:GraphUnit, output:int, input:
 	unitOut.ConnectedOut(data)
 	topLayer.update()
 	return true
+
+func Disconnect(data:Dictionary)->void:
+	for i in connections.size():
+		if connections[i] == data:
+			connections.remove(i)
+			break
+	topLayer.update()
+
+
+

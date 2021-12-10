@@ -4,9 +4,7 @@ class_name GraphUnit
 signal UnitChanged
 signal InputPressed
 signal OutputPressed
-# warning-ignore:unused_signal
-signal InputDisconnect
-signal OutputDisconnect
+signal Disconnect
 
 export var inputCount:int setget SetInputs
 export var outputCount:int setget SetOutputs
@@ -18,6 +16,7 @@ var connectorScene:PackedScene = preload("res://UnitConnector/Connector.tscn")
 var isDragged: = false
 var inputs:Array = []
 var outputs:Array = []
+var connectionsIn:Dictionary = {}	#data list array by output key
 var connectionsOut:Dictionary = {}	#data list array by output key
 
 func SetInputs(value:int)->void:
@@ -30,6 +29,10 @@ func SetInputs(value:int)->void:
 			inputParent.add_child(inst)
 # warning-ignore:return_value_discarded
 			inst.connect("pressed", self, "InputPressed", [inst, inputs.size()])
+# warning-ignore:return_value_discarded
+			inst.connect("Disconnect", self, "InputDisconnected", [inputs.size()])
+# warning-ignore:return_value_discarded
+			inst.connect("exit_tree", self, "InputRemoved", [inputs.size()])
 			inputs.append(inst)
 			inst.modulate = Color(randf(), randf(), randf())	############# TEST
 	elif inputCount > value:
@@ -47,6 +50,10 @@ func SetOutputs(value:int)->void:
 			outputParent.add_child(inst)
 # warning-ignore:return_value_discarded
 			inst.connect("pressed", self, "OutputPressed", [inst, outputs.size()])
+# warning-ignore:return_value_discarded
+			inst.connect("Disconnect", self, "OutputDisconnected", [outputs.size()])
+# warning-ignore:return_value_discarded
+			inst.connect("exit_tree", self, "OutputRemoved", [outputs.size()])
 			outputs.append(inst)
 			inst.modulate = Color(randf(), randf(), randf())	############# TEST
 	elif outputCount > value:
@@ -74,19 +81,53 @@ func _gui_input(event:InputEvent)->void:
 		rect_position += event.relative
 		emit_signal("UnitChanged", rect_position, rect_size)
 
+
 func InputPressed(_connector:Button, index:int)->void:
 	emit_signal("InputPressed", self, index)
 
 func OutputPressed(_connector:Button, index:int)->void:
 	emit_signal("OutputPressed", self, index)
 
-func OutputDisconnected(_connector:Button, data:Dictionary)->void:
-	emit_signal("OutputDisconnect", self, data)
 
-# warning-ignore:unused_argument
-# warning-ignore:unused_argument
-func Disconnected(connector:Connector, data:Dictionary)->void:
-	pass # Triggered from input side
+func InputDisconnected(index:int)->void:
+	if !connectionsIn.has(index):
+		return
+	if connectionsIn[index].empty():
+		return
+	var data:Dictionary = connectionsIn[index].pop_back()
+	var list:Array = data.unitOut.connectionsOut[data.output]
+	for i in list.size():
+		if list[i] == data:
+			data.unitOut.connectionsOut[data.output].remove(i)
+			break
+	emit_signal("Disconnect", data)
+
+func OutputDisconnected(index:int)->void:
+	if !connectionsOut.has(index):
+		return
+	if connectionsOut[index].empty():
+		return
+	var data:Dictionary = connectionsOut[index].pop_back()
+	var list:Array = data.unitIn.connectionsIn[data.input]
+	for i in list.size():
+		if list[i] == data:
+			data.unitIn.connectionsIn[data.input].remove(i)
+			break
+	emit_signal("Disconnect", data)
+
+
+func InputRemoved(index:int)->void:
+	if !connectionsIn.has(index):
+		return
+	if connectionsIn[index].empty():
+		return
+
+func OutputRemoved(index:int)->void:
+	if !connectionsOut.has(index):
+		return
+	if connectionsOut[index].empty():
+		return
+
 
 #Check if connection already is existing
 func ConnectionExists(data:Dictionary)->bool:
@@ -98,22 +139,27 @@ func ConnectionExists(data:Dictionary)->bool:
 				return true
 	return false
 
+func ConnectedIn(data:Dictionary)->void:
+	var entry:int = data.input
+	if !connectionsIn.has(entry):
+		connectionsIn[entry] = []
+	connectionsIn[entry].append(data)
+
 func ConnectedOut(data:Dictionary)->void:
-	if !connectionsOut.has(str(data.output)):
-		connectionsOut[str(data.output)] = []
-	connectionsOut[str(data.output)].append(data)
+	var entry:int = data.output
+	if !connectionsOut.has(entry):
+		connectionsOut[entry] = []
+	connectionsOut[entry].append(data)
 	
-	var connectorOut:Connector = inputs[data.output]
-# warning-ignore:return_value_discarded
-	connectorOut.connect("disconnect", self, "Disconnect", [connectorOut, data])
-	
-	var connectorIn:Connector = data.unitIn.inputs[data.input]
-# warning-ignore:return_value_discarded
-	connectorIn.connect("disconnect", self, "Disconnect", [connectorIn, data])
-# warning-ignore:return_value_discarded
-	connectorIn.connect("tree_exited", self, "Disconnect", [connectorIn, data])
+	data.unitIn.ConnectedIn(data)
 
 # Chance to check if connection is valid
 func ConnectionValidation(data:Dictionary)->bool:
 	return !ConnectionExists(data)
+
+
+
+
+
+
 
