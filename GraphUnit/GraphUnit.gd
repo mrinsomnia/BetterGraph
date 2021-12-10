@@ -5,6 +5,7 @@ signal UnitChanged
 signal InputPressed
 signal OutputPressed
 signal Disconnect
+signal ConnectionsRemoved
 
 export var inputCount:int setget SetInputs
 export var outputCount:int setget SetOutputs
@@ -20,6 +21,8 @@ var connectionsIn:Dictionary = {}	#data list array by output key
 var connectionsOut:Dictionary = {}	#data list array by output key
 
 func SetInputs(value:int)->void:
+	if value < 0:
+		return
 	if !is_inside_tree():
 		inputCount = value
 		return
@@ -32,7 +35,7 @@ func SetInputs(value:int)->void:
 # warning-ignore:return_value_discarded
 			inst.connect("Disconnect", self, "InputDisconnected", [inputs.size()])
 # warning-ignore:return_value_discarded
-			inst.connect("exit_tree", self, "InputRemoved", [inputs.size()])
+			inst.connect("tree_exited", self, "InputRemoved", [inputs.size()])
 			inputs.append(inst)
 			inst.modulate = Color(randf(), randf(), randf())	############# TEST
 	elif inputCount > value:
@@ -41,6 +44,8 @@ func SetInputs(value:int)->void:
 	inputCount = value
 
 func SetOutputs(value:int)->void:
+	if value < 0:
+		return
 	if !is_inside_tree():
 		outputCount = value
 		return
@@ -53,7 +58,7 @@ func SetOutputs(value:int)->void:
 # warning-ignore:return_value_discarded
 			inst.connect("Disconnect", self, "OutputDisconnected", [outputs.size()])
 # warning-ignore:return_value_discarded
-			inst.connect("exit_tree", self, "OutputRemoved", [outputs.size()])
+			inst.connect("tree_exited", self, "OutputRemoved", [outputs.size()])
 			outputs.append(inst)
 			inst.modulate = Color(randf(), randf(), randf())	############# TEST
 	elif outputCount > value:
@@ -77,6 +82,12 @@ func _gui_input(event:InputEvent)->void:
 				isDragged = true
 			if !event.pressed && isDragged:
 				isDragged = false
+		elif event.button_index == 4:
+			SetInputs(inputCount+1)
+			SetOutputs(outputCount+1)
+		elif event.button_index == 5:
+			SetInputs(inputCount-1)
+			SetOutputs(outputCount-1)
 	elif event is InputEventMouseMotion && isDragged:
 		rect_position += event.relative
 		emit_signal("UnitChanged", rect_position, rect_size)
@@ -121,12 +132,28 @@ func InputRemoved(index:int)->void:
 		return
 	if connectionsIn[index].empty():
 		return
+	var list:Array = connectionsIn[index]
+	for data in list:
+		var listOut:Array = data.unitOut.connectionsOut[data.output]
+		for i in listOut.size():
+			if listOut[i] == data:
+				listOut.remove(i)
+				break
+	emit_signal("ConnectionsRemoved", list)
 
 func OutputRemoved(index:int)->void:
 	if !connectionsOut.has(index):
 		return
 	if connectionsOut[index].empty():
 		return
+	var list:Array = connectionsOut[index]
+	for data in list:
+		var listIn:Array = data.unitIn.connectionsIn[data.input]
+		for i in listIn.size():
+			if listIn[i] == data:
+				listIn.remove(i)
+				break
+	emit_signal("ConnectionsRemoved", list)
 
 
 #Check if connection already is existing

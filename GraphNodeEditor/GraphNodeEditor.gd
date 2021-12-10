@@ -12,7 +12,7 @@ var unitList:Array
 var isDragged: = false
 var inputSelected:Dictionary
 var outputSelected:Dictionary
-var connections:Array
+var connections:Dictionary
 
 
 func _ready()->void:
@@ -71,6 +71,8 @@ func AddUnit(unit:GraphUnit, pos:Vector2 = Vector2.ZERO)->void:
 	unit.connect("OutputPressed", self, "OutputPressed")
 # warning-ignore:return_value_discarded
 	unit.connect("Disconnect", self, "Disconnect")
+# warning-ignore:return_value_discarded
+	unit.connect("ConnectionsRemoved", self, "ConnectionsRemoved")
 
 func RemoveUnit(unit:GraphUnit)->void:
 # warning-ignore:return_value_discarded
@@ -133,17 +135,26 @@ func EstablishConnection(unitOut:GraphUnit, unitIn:GraphUnit, output:int, input:
 	}
 	if !unitOut.ConnectionValidation(data):
 		return false
-	connections.append(data)
 	unitOut.ConnectedOut(data)
+	if !connections.has(unitOut):
+		connections[unitOut] = []
+	connections[unitOut].append(data)
 	topLayer.update()
 	return true
 
 func Disconnect(data:Dictionary)->void:
-	for i in connections.size():
-		if connections[i] == data:
-			connections.remove(i)
+	for i in connections[data.unitOut].size():
+		if connections[data.unitOut][i] == data:
+			connections[data.unitOut].remove(i)
 			break
 	topLayer.update()
 
+func ConnectionsRemoved(list:Array)->void:
+	for data in list:
+		for i in connections[data.unitOut].size():
+			if connections[data.unitOut][i] == data:
+				connections[data.unitOut].remove(i)
+				break
+	topLayer.update()
 
 

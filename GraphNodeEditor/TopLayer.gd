@@ -4,14 +4,17 @@ const BEZIER_LINE_DIVISIONS = 24
 const step = 1.0 / BEZIER_LINE_DIVISIONS
 
 func _draw()->void:
-	for data in owner.connections:
-		var output:Button = data.unitOut.outputs[data.output]
-		var input:Button = data.unitIn.inputs[data.input]
-		draw_line_bezier_cubic(
-			output.rect_global_position + output.rect_size * 0.5 - rect_global_position,
-			input.rect_global_position + input.rect_size * 0.5 - rect_global_position,
-			output.modulate,
-			input.modulate
+	var keys:Array = owner.connections.keys()
+	for k in keys:
+		var list:Array = owner.connections[k]
+		for data in list:
+			var output:Button = data.unitOut.outputs[data.output]
+			var input:Button = data.unitIn.inputs[data.input]
+			draw_line_bezier_cubic(
+				output.rect_global_position + output.rect_size * 0.5 - rect_global_position,
+				input.rect_global_position + input.rect_size * 0.5 - rect_global_position,
+				output.modulate,
+				input.modulate
 		)
 
 
