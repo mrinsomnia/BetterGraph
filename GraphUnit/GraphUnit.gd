@@ -177,8 +177,11 @@ func ConnectedOut(data:Dictionary)->void:
 	if !connectionsOut.has(entry):
 		connectionsOut[entry] = []
 	connectionsOut[entry].append(data)
-	
 	data.unitIn.ConnectedIn(data)
+
+func RemoveSelf()->void:
+	#TO-DO collect all relative connections and clear all data
+	pass
 
 # Chance to check if connection is valid
 func ConnectionValidation(data:Dictionary)->bool:
