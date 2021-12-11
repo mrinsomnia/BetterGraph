@@ -1,5 +1,5 @@
 extends Control
-class_name GraphNodeEditor
+class_name GraphUnitEditor
 
 onready var hScroll: = $HScrollBar
 onready var vScroll: = $VScrollBar
