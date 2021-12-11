@@ -14,6 +14,7 @@ export var outputParentPath:NodePath
 
 onready var inputParent: = get_node(inputParentPath)
 onready var outputParent: = get_node(outputParentPath)
+onready var parent:Node = get_parent()
 
 var connectorScene:PackedScene = preload("res://UnitConnector/Connector.tscn")
 var isDragged: = false
@@ -82,6 +83,7 @@ func _gui_input(event:InputEvent)->void:
 		if event.button_index == 1:
 			if event.pressed && !isDragged:
 				isDragged = true
+				parent.move_child(self, parent.get_child_count() -1)
 			if !event.pressed && isDragged:
 				isDragged = false
 		elif event.button_index == 4 && event.pressed: #TEST
