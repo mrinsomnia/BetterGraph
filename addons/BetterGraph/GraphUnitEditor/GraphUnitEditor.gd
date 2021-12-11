@@ -5,7 +5,6 @@ onready var vScroll: = $VScrollBar
 onready var board: = $Board
 onready var topLayer: = $TopLayer
 
-var unitScene:PackedScene = preload("res://GraphUnit/GraphUnit.tscn")
 var unitDictionary:Dictionary
 var unitList:Array
 var isDragged: = false
@@ -23,11 +22,6 @@ func _ready()->void:
 	scrollMargin = Vector2(vScroll.rect_size.x, hScroll.rect_size.y)
 	board.rect_size = rect_size - scrollMargin
 	UpdateScrollBars()
-	
-	# TEST UNITS
-	for i in 3:
-		var inst = unitScene.instance()
-		AddUnit(inst, board.rect_size * 0.5 * Vector2(randf(), randf()))
 
 func _gui_input(event:InputEvent)->void:
 	if event is InputEventMouseButton:
@@ -75,6 +69,9 @@ func AddUnit(unit:GraphUnit, pos:Vector2 = Vector2.ZERO)->void:
 	unit.connect("Disconnect", self, "Disconnect")
 # warning-ignore:return_value_discarded
 	unit.connect("ConnectionsRemoved", self, "ConnectionsRemoved")
+# warning-ignore:return_value_discarded
+	unit.connect("DrawConnections", topLayer, "update")
+	
 
 func RemoveUnit(unit:GraphUnit)->void:
 # warning-ignore:return_value_discarded

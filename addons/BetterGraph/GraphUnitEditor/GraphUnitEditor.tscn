@@ -1,15 +1,15 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://GraphUnitEditor/GraphUnitEditor.gd" type="Script" id=1]
-[ext_resource path="res://GraphUnitEditor/TopLayer.gd" type="Script" id=2]
+[ext_resource path="res://addons/BetterGraph/GraphUnitEditor/TopLayer.gd" type="Script" id=1]
+[ext_resource path="res://addons/BetterGraph/GraphUnitEditor/GraphUnitEditor.gd" type="Script" id=2]
 
 [sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0.133333, 0.164706, 0.188235, 1 )
+bg_color = Color( 0.109804, 0.137255, 0.156863, 1 )
 
 [node name="GraphUnitEditor" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource( 1 )
+script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -25,7 +25,7 @@ __meta__ = {
 
 [node name="TopLayer" type="Control" parent="."]
 mouse_filter = 2
-script = ExtResource( 2 )
+script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
