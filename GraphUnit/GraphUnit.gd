@@ -82,10 +82,10 @@ func _gui_input(event:InputEvent)->void:
 				isDragged = true
 			if !event.pressed && isDragged:
 				isDragged = false
-		elif event.button_index == 4:
+		elif event.button_index == 4 && event.pressed: #TEST
 			SetInputs(inputCount+1)
 			SetOutputs(outputCount+1)
-		elif event.button_index == 5:
+		elif event.button_index == 5 && event.pressed: #TEST
 			SetInputs(inputCount-1)
 			SetOutputs(outputCount-1)
 	elif event is InputEventMouseMotion && isDragged:
