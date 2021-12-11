@@ -9,9 +9,11 @@ signal ConnectionsRemoved
 
 export var inputCount:int setget SetInputs
 export var outputCount:int setget SetOutputs
+export var inputParentPath:NodePath
+export var outputParentPath:NodePath
 
-onready var inputParent: = $HBoxContainer/InputParent
-onready var outputParent: = $HBoxContainer/OutputParent
+onready var inputParent: = get_node(inputParentPath)
+onready var outputParent: = get_node(outputParentPath)
 
 var connectorScene:PackedScene = preload("res://UnitConnector/Connector.tscn")
 var isDragged: = false

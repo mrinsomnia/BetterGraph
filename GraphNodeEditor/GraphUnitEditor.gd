@@ -1,5 +1,4 @@
 extends Control
-class_name GraphUnitEditor
 
 onready var hScroll: = $HScrollBar
 onready var vScroll: = $VScrollBar
@@ -22,6 +21,7 @@ func _ready()->void:
 	vScroll.connect("scrolling", self, "VScrolling")
 	UpdateScrollBars()
 	
+	# TEST UNITS
 	for i in 3:
 		var inst = unitScene.instance()
 		AddUnit(inst, board.rect_size * 0.5 * Vector2(randf(), randf()))
@@ -40,7 +40,6 @@ func _gui_input(event:InputEvent)->void:
 		VScrolling()
 
 func UpdateScrollBars()->void:
-	#yield(get_tree(), "idle_frame")
 	hScroll.max_value = board.rect_size.x
 	hScroll.value = -board.rect_position.x
 	hScroll.page = rect_size.x
@@ -95,13 +94,20 @@ func UnitChanged(pos:Vector2, size:Vector2)->void:
 	if pos.y + size.y > board.rect_size.y:
 		board.rect_size.y = pos.y + size.y
 	
+	var offset: = Vector2.ZERO
+	var move: = false
 	if pos.x < 0.0:
 		board.rect_size.x += -pos.x
-		MoveUnits(Vector2(-pos.x, 0.0))
+		offset.x = -pos.x
+		move = true
 	
 	if pos.y < 0.0:
 		board.rect_size.y += -pos.y
-		MoveUnits(Vector2(0.0, -pos.y))
+		offset.y = -pos.y
+		move = true
+	
+	if move:
+		MoveUnits(offset)
 	
 	UpdateScrollBars()
 	topLayer.update()

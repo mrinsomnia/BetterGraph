@@ -18,16 +18,10 @@ _global_script_classes=[ {
 "class": "GraphUnit",
 "language": "GDScript",
 "path": "res://GraphUnit/GraphUnit.gd"
-}, {
-"base": "Control",
-"class": "GraphUnitEditor",
-"language": "GDScript",
-"path": "res://GraphNodeEditor/GraphNodeEditor.gd"
 } ]
 _global_script_class_icons={
 "Connector": "",
-"GraphUnit": "",
-"GraphUnitEditor": ""
+"GraphUnit": ""
 }
 
 [application]

@@ -24,6 +24,8 @@ __meta__ = {
 }
 inputCount = 3
 outputCount = 4
+inputParentPath = NodePath("VBoxContainer/HBoxContainer/InputParent")
+outputParentPath = NodePath("VBoxContainer/HBoxContainer/OutputParent")
 
 [node name="Panel" type="Panel" parent="."]
 margin_right = 64.0
@@ -32,27 +34,29 @@ rect_min_size = Vector2( 64, 0 )
 mouse_filter = 2
 custom_styles/panel = SubResource( 2 )
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 margin_right = 64.0
 margin_bottom = 92.0
 
-[node name="InputParent" type="VBoxContainer" parent="HBoxContainer"]
-margin_bottom = 92.0
-size_flags_horizontal = 2
-
-[node name="Button" type="Button" parent="HBoxContainer"]
-margin_left = 22.0
-margin_top = 36.0
-margin_right = 42.0
-margin_bottom = 56.0
-size_flags_horizontal = 4
-size_flags_vertical = 4
+[node name="Button" type="Button" parent="VBoxContainer"]
+margin_left = 44.0
+margin_right = 64.0
+margin_bottom = 20.0
+size_flags_horizontal = 8
+size_flags_vertical = 0
 text = "X"
 
-[node name="OutputParent" type="VBoxContainer" parent="HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 24.0
+margin_right = 64.0
+margin_bottom = 24.0
+
+[node name="InputParent" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+size_flags_horizontal = 2
+
+[node name="OutputParent" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
 margin_left = 64.0
 margin_right = 64.0
-margin_bottom = 92.0
 size_flags_horizontal = 10
 
-[connection signal="pressed" from="HBoxContainer/Button" to="." method="RemoveSelf"]
+[connection signal="pressed" from="VBoxContainer/Button" to="." method="RemoveSelf"]
