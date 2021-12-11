@@ -27,7 +27,7 @@ _global_script_class_icons={
 [application]
 
 config/name="BetterGraph"
-run/main_scene="res://GraphNodeEditor/GraphNodeEditor.tscn"
+run/main_scene="res://GraphUnitEditor/GraphUnitEditor.tscn"
 config/icon="res://icon.png"
 
 [display]
