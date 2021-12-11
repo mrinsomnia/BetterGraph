@@ -58,6 +58,7 @@ text = "NewUnit"
 script = ExtResource( 2 )
 unitScene = ExtResource( 3 )
 graphUnitEditorPath = NodePath("../../Panel/GraphUnitEditor")
+position = Vector2( 10, 10 )
 
 [node name="Panel" type="Panel" parent="VBoxContainer"]
 margin_top = 22.0
