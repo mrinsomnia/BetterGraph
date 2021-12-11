@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/IconConnector.png-b1727f3abd5494f5c34ef6d7eec9d2e5.stex"
+path="res://.import/IconConnector.png-6c3c4fc5d765d2c7a2f4509139d342c8.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UnitConnector/IconConnector.png"
-dest_files=[ "res://.import/IconConnector.png-b1727f3abd5494f5c34ef6d7eec9d2e5.stex" ]
+source_file="res://addons/BetterGraph/UnitConnector/IconConnector.png"
+dest_files=[ "res://.import/IconConnector.png-6c3c4fc5d765d2c7a2f4509139d342c8.stex" ]
 
 [params]
 

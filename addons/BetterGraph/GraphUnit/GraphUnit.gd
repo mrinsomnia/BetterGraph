@@ -6,17 +6,18 @@ signal InputPressed
 signal OutputPressed
 signal Disconnect
 signal ConnectionsRemoved
+signal DrawConnections
 
 export var inputCount:int setget SetInputs
 export var outputCount:int setget SetOutputs
 export var inputParentPath:NodePath
 export var outputParentPath:NodePath
+export var connectorScene:PackedScene = preload("res://addons/BetterGraph/UnitConnector/Connector.tscn")
 
 onready var inputParent: = get_node(inputParentPath)
 onready var outputParent: = get_node(outputParentPath)
 onready var parent:Node = get_parent()
 
-var connectorScene:PackedScene = preload("res://UnitConnector/Connector.tscn")
 var isDragged: = false
 var inputs:Array = []
 var outputs:Array = []
@@ -86,12 +87,6 @@ func _gui_input(event:InputEvent)->void:
 				parent.move_child(self, parent.get_child_count() -1)
 			if !event.pressed && isDragged:
 				isDragged = false
-		elif event.button_index == 4 && event.pressed: #TEST
-			SetInputs(inputCount+1)
-			SetOutputs(outputCount+1)
-		elif event.button_index == 5 && event.pressed: #TEST
-			SetInputs(inputCount-1)
-			SetOutputs(outputCount-1)
 	elif event is InputEventMouseMotion && isDragged:
 		rect_position += event.relative
 		emit_signal("UnitChanged", rect_position, rect_size)

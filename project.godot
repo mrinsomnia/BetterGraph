@@ -12,12 +12,12 @@ _global_script_classes=[ {
 "base": "Button",
 "class": "Connector",
 "language": "GDScript",
-"path": "res://UnitConnector/Connector.gd"
+"path": "res://addons/BetterGraph/UnitConnector/Connector.gd"
 }, {
 "base": "PanelContainer",
 "class": "GraphUnit",
 "language": "GDScript",
-"path": "res://GraphUnit/GraphUnit.gd"
+"path": "res://addons/BetterGraph/GraphUnit/GraphUnit.gd"
 } ]
 _global_script_class_icons={
 "Connector": "",
@@ -27,7 +27,7 @@ _global_script_class_icons={
 [application]
 
 config/name="BetterGraph"
-run/main_scene="res://GraphUnitEditor/GraphUnitEditor.tscn"
+run/main_scene="res://App/App.tscn"
 config/icon="res://icon.png"
 
 [display]
