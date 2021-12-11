@@ -180,8 +180,38 @@ func ConnectedOut(data:Dictionary)->void:
 	data.unitIn.ConnectedIn(data)
 
 func RemoveSelf()->void:
-	#TO-DO collect all relative connections and clear all data
-	pass
+# warning-ignore:unassigned_variable
+	var connections:Array
+	#Inputs
+	for index in inputCount:
+		if !connectionsIn.has(index):
+			continue
+		if connectionsIn[index].empty():
+			continue
+		var list:Array = connectionsIn[index]
+		connections.append_array(list.duplicate())
+		for data in list:
+			var listOut:Array = data.unitOut.connectionsOut[data.output]
+			for i in listOut.size():
+				if listOut[i] == data:
+					listOut.remove(i)
+					break
+	#Outputs
+	for index in outputCount:
+		if !connectionsOut.has(index):
+			continue
+		if connectionsOut[index].empty():
+			continue
+		var list:Array = connectionsOut[index]
+		connections.append_array(list.duplicate())
+		for data in list:
+			var listIn:Array = data.unitIn.connectionsIn[data.input]
+			for i in listIn.size():
+				if listIn[i] == data:
+					listIn.remove(i)
+					break
+	emit_signal("ConnectionsRemoved", connections)
+	queue_free()
 
 # Chance to check if connection is valid
 func ConnectionValidation(data:Dictionary)->bool:

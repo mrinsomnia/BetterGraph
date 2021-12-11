@@ -40,8 +40,19 @@ margin_bottom = 92.0
 margin_bottom = 92.0
 size_flags_horizontal = 2
 
+[node name="Button" type="Button" parent="HBoxContainer"]
+margin_left = 22.0
+margin_top = 36.0
+margin_right = 42.0
+margin_bottom = 56.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "X"
+
 [node name="OutputParent" type="VBoxContainer" parent="HBoxContainer"]
 margin_left = 64.0
 margin_right = 64.0
 margin_bottom = 92.0
 size_flags_horizontal = 10
+
+[connection signal="pressed" from="HBoxContainer/Button" to="." method="RemoveSelf"]
