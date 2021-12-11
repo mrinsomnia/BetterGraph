@@ -12,6 +12,7 @@ var isDragged: = false
 var inputSelected:Dictionary
 var outputSelected:Dictionary
 var connections:Dictionary
+var scrollMargin:Vector2
 
 
 func _ready()->void:
@@ -19,6 +20,8 @@ func _ready()->void:
 	hScroll.connect("scrolling", self, "HScrolling")
 # warning-ignore:return_value_discarded
 	vScroll.connect("scrolling", self, "VScrolling")
+	scrollMargin = Vector2(vScroll.rect_size.x, hScroll.rect_size.y)
+	board.rect_size = rect_size - scrollMargin
 	UpdateScrollBars()
 	
 	# TEST UNITS
@@ -40,10 +43,10 @@ func _gui_input(event:InputEvent)->void:
 		VScrolling()
 
 func UpdateScrollBars()->void:
-	hScroll.max_value = board.rect_size.x
+	hScroll.max_value = board.rect_size.x + scrollMargin.x
 	hScroll.value = -board.rect_position.x
 	hScroll.page = rect_size.x
-	vScroll.max_value = board.rect_size.y
+	vScroll.max_value = board.rect_size.y + scrollMargin.y
 	vScroll.value = -board.rect_position.y
 	vScroll.page = rect_size.y
 
@@ -109,8 +112,20 @@ func UnitChanged(pos:Vector2, size:Vector2)->void:
 	if move:
 		MoveUnits(offset)
 	
+	if board.rect_size > rect_size - scrollMargin:
+		var limits = rect_size - scrollMargin
+		for unit in unitList:
+			var unitLimit:Vector2 = unit.rect_position + unit.rect_size
+			if unitLimit.x > limits.x:
+				limits.x = unitLimit.x
+			if unitLimit.y > limits.y:
+				limits.y = unitLimit.y
+		board.rect_size = limits
+	
 	UpdateScrollBars()
 	topLayer.update()
+	HScrolling()
+	VScrolling()
 
 func InputPressed(unit:GraphUnit, input:int)->void:
 	if outputSelected.empty():
