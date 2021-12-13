@@ -1,11 +1,11 @@
 extends Control
 
-export var topLayerPath:NodePath
+export var connectionDrawPath:NodePath
 
 onready var hScroll: = $HScrollBar
 onready var vScroll: = $VScrollBar
 onready var board: = $Board
-onready var topLayer: = get_node(topLayerPath)
+onready var connectionDraw: = get_node(connectionDrawPath)
 
 var unitDictionary:Dictionary
 var unitList:Array
@@ -70,7 +70,7 @@ func AddUnit(unit:GraphUnit, pos:Vector2 = Vector2.ZERO)->void:
 # warning-ignore:return_value_discarded
 	unit.connect("ConnectionsRemoved", self, "ConnectionsRemoved")
 # warning-ignore:return_value_discarded
-	unit.connect("DrawConnections", topLayer, "update")
+	unit.connect("DrawConnections", connectionDraw, "update")
 	
 
 func RemoveUnit(unit:GraphUnit)->void:
@@ -120,7 +120,7 @@ func UnitChanged(pos:Vector2, size:Vector2)->void:
 		board.rect_size = limits
 	
 	UpdateScrollBars()
-	topLayer.update()
+	connectionDraw.update()
 	HScrolling()
 	VScrolling()
 
@@ -157,7 +157,7 @@ func EstablishConnection(unitOut:GraphUnit, unitIn:GraphUnit, output:int, input:
 	if !connections.has(unitOut):
 		connections[unitOut] = []
 	connections[unitOut].append(data)
-	topLayer.update()
+	connectionDraw.update()
 	return true
 
 func Disconnect(data:Dictionary)->void:
@@ -165,7 +165,7 @@ func Disconnect(data:Dictionary)->void:
 		if connections[data.unitOut][i] == data:
 			connections[data.unitOut].remove(i)
 			break
-	topLayer.update()
+	connectionDraw.update()
 
 func ConnectionsRemoved(list:Array)->void:
 	for data in list:
@@ -173,6 +173,6 @@ func ConnectionsRemoved(list:Array)->void:
 			if connections[data.unitOut][i] == data:
 				connections[data.unitOut].remove(i)
 				break
-	topLayer.update()
+	connectionDraw.update()
 
 

@@ -14,7 +14,7 @@ script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-topLayerPath = NodePath("Board/TopLayer")
+connectionDrawPath = NodePath("Board/ConnectionDraw")
 
 [node name="Board" type="Panel" parent="."]
 anchor_right = 1.0
@@ -25,7 +25,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TopLayer" type="Control" parent="Board"]
+[node name="ConnectionDraw" type="Control" parent="Board"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
