@@ -1,9 +1,11 @@
 extends Control
 
+export var topLayerPath:NodePath
+
 onready var hScroll: = $HScrollBar
 onready var vScroll: = $VScrollBar
 onready var board: = $Board
-onready var topLayer: = $TopLayer
+onready var topLayer: = get_node(topLayerPath)
 
 var unitDictionary:Dictionary
 var unitList:Array
