@@ -25,7 +25,7 @@ func draw_line_bezier_cubic(startPos:Vector2, endPos:Vector2, colorFrom:Color, c
 	for i in BEZIER_LINE_DIVISIONS:
 		current.y = EaseCubicInOut(i, startPos.y, endPos.y - startPos.y, BEZIER_LINE_DIVISIONS)
 		current.x = previous.x + (endPos.x - startPos.x) / BEZIER_LINE_DIVISIONS
-		draw_line(previous, current, colorFrom.linear_interpolate(colorTo, step * i), 1, true)
+		draw_line(previous, current, colorFrom.linear_interpolate(colorTo, step * i), 2, true)
 		previous = current
 
 static func EaseCubicInOut(t:float, b:float, c:float, d:float)->float:
