@@ -48,11 +48,9 @@ func UpdateScrollBars()->void:
 
 func HScrolling()->void:
 	board.rect_position.x = -hScroll.value
-	topLayer.rect_position.x = -hScroll.value
 
 func VScrolling()->void:
 	board.rect_position.y = -vScroll.value
-	topLayer.rect_position.y = -vScroll.value
 
 func AddUnit(unit:GraphUnit, pos:Vector2 = Vector2.ZERO)->void:
 	board.add_child(unit)
