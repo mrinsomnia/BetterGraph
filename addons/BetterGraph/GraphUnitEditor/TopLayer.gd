@@ -35,7 +35,4 @@ static func EaseCubicInOut(t:float, b:float, c:float, d:float)->float:
 	t -= 2.0
 	return (c/2.0 *(t *t *t + 2.0) + b)
 
-# warning-ignore:unused_argument
-func _draw_connection_line(from:Vector2, to:Vector2, colorFrom:Color, colorTo:Color)->void:
-	draw_line(from, to, colorFrom)
 
