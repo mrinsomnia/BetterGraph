@@ -57,6 +57,7 @@ func AddUnit(unit:GraphUnit, pos:Vector2 = Vector2.ZERO)->void:
 	unit.rect_position = pos + Vector2(hScroll.value, vScroll.value)
 	unitDictionary[unit.name] = unit
 	unitList.append(unit)
+	
 # warning-ignore:return_value_discarded
 	unit.connect("tree_exited", self, "RemoveUnit", [unit])
 # warning-ignore:return_value_discarded
@@ -85,7 +86,7 @@ func MoveUnits(offset:Vector2)->void:
 	for unit in unitList:
 		unit.rect_position += offset
 
-func UnitChanged(pos:Vector2, size:Vector2)->void:
+func UnitChanged(unit:GraphUnit, pos:Vector2, size:Vector2)->void:
 	### OPTIMIZE SHRINK & EXTEND
 	### NOW ONLY EXTENDS
 	if pos.x + size.x > board.rect_size.x:

@@ -89,7 +89,7 @@ func _gui_input(event:InputEvent)->void:
 				isDragged = false
 	elif event is InputEventMouseMotion && isDragged:
 		rect_position += event.relative
-		emit_signal("UnitChanged", rect_position, rect_size)
+		emit_signal("UnitChanged", self, rect_position, rect_size)
 
 
 func InputPressed(_connector:Button, index:int)->void:
