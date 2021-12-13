@@ -54,7 +54,7 @@ func VScrolling()->void:
 
 func AddUnit(unit:GraphUnit, pos:Vector2 = Vector2.ZERO)->void:
 	board.add_child(unit)
-	unit.rect_position = pos
+	unit.rect_position = pos + Vector2(hScroll.value, vScroll.value)
 	unitDictionary[unit.name] = unit
 	unitList.append(unit)
 # warning-ignore:return_value_discarded
