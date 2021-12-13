@@ -15,7 +15,7 @@ func _draw()->void:
 				input.rect_global_position + input.rect_size * 0.5 - rect_global_position,
 				output.modulate,
 				input.modulate
-		)
+			)
 
 
 func draw_line_bezier_cubic(startPos:Vector2, endPos:Vector2, colorFrom:Color, colorTo:Color)->void:
