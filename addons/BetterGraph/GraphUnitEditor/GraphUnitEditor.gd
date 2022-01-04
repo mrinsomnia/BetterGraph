@@ -1,10 +1,11 @@
 extends Control
 
 export var connectionDrawPath:NodePath
+export var boardPath:NodePath
 
 onready var hScroll: = $HScrollBar
 onready var vScroll: = $VScrollBar
-onready var board: = $Board
+onready var board: = get_node(boardPath)
 onready var connectionDraw: = get_node(connectionDrawPath)
 
 var unitDictionary:Dictionary
@@ -14,6 +15,7 @@ var inputSelected:Dictionary
 var outputSelected:Dictionary
 var connections:Dictionary
 var scrollMargin:Vector2
+var areaSize:Vector2
 
 
 func _ready()->void:
@@ -22,7 +24,7 @@ func _ready()->void:
 # warning-ignore:return_value_discarded
 	vScroll.connect("scrolling", self, "VScrolling")
 	scrollMargin = Vector2(vScroll.rect_size.x, hScroll.rect_size.y)
-	board.rect_size = rect_size - scrollMargin
+	areaSize = rect_size - scrollMargin
 	UpdateScrollBars()
 
 func _gui_input(event:InputEvent)->void:
@@ -39,12 +41,12 @@ func _gui_input(event:InputEvent)->void:
 		VScrolling()
 
 func UpdateScrollBars()->void:
-	hScroll.max_value = board.rect_size.x + scrollMargin.x
+	hScroll.max_value = areaSize.x + scrollMargin.x
 	hScroll.value = -board.rect_position.x
-	hScroll.page = rect_size.x
-	vScroll.max_value = board.rect_size.y + scrollMargin.y
+	hScroll.page = areaSize.x
+	vScroll.max_value = areaSize.y + scrollMargin.y
 	vScroll.value = -board.rect_position.y
-	vScroll.page = rect_size.y
+	vScroll.page = areaSize.y
 
 func HScrolling()->void:
 	board.rect_position.x = -hScroll.value
@@ -86,9 +88,12 @@ func MoveUnits(offset:Vector2)->void:
 	for unit in unitList:
 		unit.rect_position += offset
 
-func UnitChanged(unit:GraphUnit, pos:Vector2, size:Vector2)->void:
+func UnitChanged(unit:GraphUnit)->void:
 	### OPTIMIZE SHRINK & EXTEND
 	### NOW ONLY EXTENDS
+	var pos: = unit.rect_global_position
+	var size: = unit.rect_size
+	
 	if pos.x + size.x > board.rect_size.x:
 		board.rect_size.x = pos.x + size.x
 	
