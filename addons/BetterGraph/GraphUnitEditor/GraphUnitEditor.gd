@@ -15,7 +15,7 @@ var inputSelected:Dictionary
 var outputSelected:Dictionary
 var connections:Dictionary
 var scrollMargin:Vector2
-var areaSize:Vector2
+var boardArea:Rect2
 
 
 func _ready()->void:
@@ -24,7 +24,7 @@ func _ready()->void:
 # warning-ignore:return_value_discarded
 	vScroll.connect("scrolling", self, "VScrolling")
 	scrollMargin = Vector2(vScroll.rect_size.x, hScroll.rect_size.y)
-	areaSize = rect_size - scrollMargin
+	boardArea.size = rect_size - scrollMargin
 	UpdateScrollBars()
 
 func _gui_input(event:InputEvent)->void:
@@ -41,18 +41,19 @@ func _gui_input(event:InputEvent)->void:
 		VScrolling()
 
 func UpdateScrollBars()->void:
-	hScroll.max_value = areaSize.x + scrollMargin.x
-	hScroll.value = -board.rect_position.x
-	hScroll.page = areaSize.x
-	vScroll.max_value = areaSize.y + scrollMargin.y
-	vScroll.value = -board.rect_position.y
-	vScroll.page = areaSize.y
+	hScroll.max_value = boardArea.size.x
+	vScroll.max_value = boardArea.size.y
+	hScroll.page = rect_size.x - scrollMargin.x
+	vScroll.page = rect_size.y - scrollMargin.y
+	#hScroll.value = -boardArea.position.x
+	#vScroll.value = -boardArea.position.y
 
 func HScrolling()->void:
-	board.rect_position.x = -hScroll.value
+	board.rect_position.x = (hScroll.value -boardArea.position.x)
+	print(board.rect_position)
 
 func VScrolling()->void:
-	board.rect_position.y = -vScroll.value
+	board.rect_position.y = (vScroll.value -boardArea.position.y)
 
 func AddUnit(unit:GraphUnit, pos:Vector2 = Vector2.ZERO)->void:
 	board.add_child(unit)
@@ -74,7 +75,12 @@ func AddUnit(unit:GraphUnit, pos:Vector2 = Vector2.ZERO)->void:
 	unit.connect("ConnectionsRemoved", self, "ConnectionsRemoved")
 # warning-ignore:return_value_discarded
 	unit.connect("DrawConnections", connectionDraw, "update")
-	
+
+func UpdateEditor()->void:
+	UpdateScrollBars()
+	HScrolling()
+	VScrolling()
+	connectionDraw.update()
 
 func RemoveUnit(unit:GraphUnit)->void:
 # warning-ignore:return_value_discarded
@@ -92,43 +98,32 @@ func UnitChanged(unit:GraphUnit)->void:
 	### OPTIMIZE SHRINK & EXTEND
 	### NOW ONLY EXTENDS
 	var pos: = unit.rect_global_position
-	var size: = unit.rect_size
+	var pos2: = unit.rect_size + unit.rect_position
+	var boardPos2: = boardArea.size - boardArea.position
+	print(pos, ' ', pos2)
 	
-	if pos.x + size.x > board.rect_size.x:
-		board.rect_size.x = pos.x + size.x
+	if pos.x < boardArea.position.x:
+		boardArea.size.x += boardArea.position.x - pos.x
+		boardArea.position.x = pos.x
 	
-	if pos.y + size.y > board.rect_size.y:
-		board.rect_size.y = pos.y + size.y
+	if pos.y < boardArea.position.y:
+		boardArea.size.y += boardArea.position.y - pos.y
+		boardArea.position.y = pos.y
+	
+	if pos2.x > boardPos2.x:
+		boardArea.size.x += pos2.x - boardPos2.x
+	
+	if pos2.y > boardPos2.y:
+		boardArea.size.y += pos2.y - boardPos2.y
+	
 	
 	var offset: = Vector2.ZERO
 	var move: = false
-	if pos.x < 0.0:
-		board.rect_size.x += -pos.x
-		offset.x = -pos.x
-		move = true
-	
-	if pos.y < 0.0:
-		board.rect_size.y += -pos.y
-		offset.y = -pos.y
-		move = true
 	
 	if move:
 		MoveUnits(offset)
 	
-	if board.rect_size > rect_size - scrollMargin:
-		var limits = rect_size - scrollMargin
-		for unit in unitList:
-			var unitLimit:Vector2 = unit.rect_position + unit.rect_size
-			if unitLimit.x > limits.x:
-				limits.x = unitLimit.x
-			if unitLimit.y > limits.y:
-				limits.y = unitLimit.y
-		board.rect_size = limits
-	
-	UpdateScrollBars()
-	connectionDraw.update()
-	HScrolling()
-	VScrolling()
+	UpdateEditor()
 
 func InputPressed(unit:GraphUnit, input:int)->void:
 	if outputSelected.empty():
