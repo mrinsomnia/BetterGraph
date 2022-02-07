@@ -13,10 +13,12 @@ export var outputCount:int setget SetOutputs
 export var inputParentPath:NodePath
 export var outputParentPath:NodePath
 export var connectorScene:PackedScene = preload("res://addons/BetterGraph/UnitConnector/Connector.tscn")
+export var unitBellyPath:NodePath
 
 onready var inputParent: = get_node(inputParentPath)
 onready var outputParent: = get_node(outputParentPath)
 onready var parent:Node = get_parent()
+onready var unitBelly: = get_node(unitBellyPath)
 
 var isDragged: = false
 var inputs:Array = []
@@ -216,7 +218,9 @@ func RemoveSelf()->void:
 func ConnectionValidation(data:Dictionary)->bool:
 	return !ConnectionExists(data)
 
-
+func InjectScene(_instance)->void:
+	
+	unitBelly.add_child(_instance)
 
 
 

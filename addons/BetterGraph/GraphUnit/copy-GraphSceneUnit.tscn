@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=2]
 
-[ext_resource path="res://addons/BetterGraph/GraphUnit/GraphUnit.gd" type="Script" id=1]
+[ext_resource path="res://addons/BetterGraph/GraphUnit/GraphSceneUnit.gd" type="Script" id=1]
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
@@ -42,7 +42,7 @@ func _ready():
 	connect(\"value_changed\", owner, \"SetOutputs\")
 "
 
-[node name="GraphUnit" type="PanelContainer"]
+[node name="GraphSceneUnit" type="PanelContainer"]
 margin_right = 28.0
 margin_bottom = 92.0
 custom_styles/panel = SubResource( 1 )
@@ -50,10 +50,8 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-inputCount = 3
-outputCount = 4
-inputParentPath = NodePath("VBoxContainer/HBoxContainer/InputParent")
-outputParentPath = NodePath("VBoxContainer/HBoxContainer/OutputParent")
+inputCount = 1
+outputCount = 1
 unitBellyPath = NodePath("VBoxContainer/HBoxContainer/VBoxContainer")
 
 [node name="Panel" type="Panel" parent="."]
