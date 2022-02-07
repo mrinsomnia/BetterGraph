@@ -120,8 +120,8 @@ func UnitChanged(unit:GraphUnit)->void:
 	var offset: = Vector2.ZERO
 	var move: = false
 	
-	if move:
-		MoveUnits(offset)
+#	if move:
+#		MoveUnits(offset)
 	
 	UpdateEditor()
 
