@@ -15,12 +15,18 @@ _global_script_classes=[ {
 "path": "res://addons/BetterGraph/UnitConnector/Connector.gd"
 }, {
 "base": "PanelContainer",
+"class": "GraphSceneUnit",
+"language": "GDScript",
+"path": "res://addons/BetterGraph/GraphUnit/GraphSceneUnit.gd"
+}, {
+"base": "PanelContainer",
 "class": "GraphUnit",
 "language": "GDScript",
 "path": "res://addons/BetterGraph/GraphUnit/GraphUnit.gd"
 } ]
 _global_script_class_icons={
 "Connector": "",
+"GraphSceneUnit": "",
 "GraphUnit": ""
 }
 
