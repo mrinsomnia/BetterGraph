@@ -50,7 +50,7 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-nodeBellyPath = NodePath("VBoxContainer/HBoxContainer/VBoxContainer")
+unitBellyPath = NodePath("VBoxContainer/HBoxContainer/VBoxContainer")
 
 [node name="Panel" type="Panel" parent="."]
 margin_right = 96.0

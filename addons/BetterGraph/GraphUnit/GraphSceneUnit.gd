@@ -13,13 +13,13 @@ export var outputCount:int setget SetOutputs
 export var inputParentPath:NodePath
 export var outputParentPath:NodePath
 export var connectorScene:PackedScene = preload("res://addons/BetterGraph/UnitConnector/Connector.tscn")
-export var nodeBellyPath:NodePath
+export var unitBellyPath:NodePath
 export var sceneUnit:PackedScene = preload("res://addons/BetterGraph/SceneUnit/SceneUnit.tscn")
 
 onready var inputParent: = get_node(inputParentPath)
 onready var outputParent: = get_node(outputParentPath)
 onready var parent:Node = get_parent()
-onready var nodeBelly: = get_node(nodeBellyPath)
+onready var unitBelly: = get_node(unitBellyPath)
 
 var isDragged: = false
 var inputs:Array = []
@@ -80,7 +80,7 @@ func HoldScene()->void:
 		return
 		
 	var inst:Control = sceneUnit.instance()
-	nodeBelly.add_child(inst)
+	unitBelly.add_child(inst)
 	
 
 
