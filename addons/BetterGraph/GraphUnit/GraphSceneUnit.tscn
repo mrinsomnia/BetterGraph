@@ -5,7 +5,3 @@
 
 [node name="GraphUnit" instance=ExtResource( 2 )]
 script = ExtResource( 1 )
-inputCount = 0
-outputCount = 0
-inputParentPath = NodePath("")
-outputParentPath = NodePath("")

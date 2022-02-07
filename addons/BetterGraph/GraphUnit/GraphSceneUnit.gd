@@ -14,6 +14,7 @@ func HoldScene()->void:
 
 
 func _ready()->void:
+	pass
 	HoldScene()
 
 
