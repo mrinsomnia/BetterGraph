@@ -31,4 +31,5 @@ margin_right = 98.0
 margin_bottom = 38.0
 text = "DO THA BOOP!"
 
+[connection signal="finished" from="AudioStreamPlayer" to="." method="_on_AudioStreamPlayer_finished"]
 [connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_Button_pressed"]

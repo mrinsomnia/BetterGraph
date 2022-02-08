@@ -33,7 +33,7 @@ _global_script_class_icons={
 [application]
 
 config/name="BetterGraph"
-run/main_scene="res://App/App.tscn"
+run/main_scene="res://addons/BetterGraph/examples/App.tscn"
 config/icon="res://icon.png"
 
 [display]

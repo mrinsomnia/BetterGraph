@@ -1,6 +1,7 @@
 extends "GraphUnit.gd"
 class_name GraphSceneUnit
 
+
 export var sceneUnit:PackedScene = preload("res://addons/BetterGraph/SceneUnit/SceneUnit.tscn")
 
 
@@ -14,7 +15,8 @@ func HoldScene()->void:
 
 
 func _ready()->void:
-	pass
+	SetInputs(1)
+	SetOutputs(1)
 	HoldScene()
 
 
