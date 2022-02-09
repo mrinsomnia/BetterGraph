@@ -16,6 +16,7 @@ var outputSelected:Dictionary
 var connections:Dictionary
 var scrollMargin:Vector2
 var boardArea:Rect2
+var unitSelected:GraphUnit = null
 
 
 func _ready()->void:
@@ -60,6 +61,7 @@ func AddUnit(unit:GraphUnit, pos:Vector2 = Vector2.ZERO)->void:
 	unit.rect_position = pos + Vector2(hScroll.value, vScroll.value)
 	unitDictionary[unit.name] = unit
 	unitList.append(unit)
+	unit.connect("UnitSelected", self, "UnitSelected")
 	
 # warning-ignore:return_value_discarded
 	unit.connect("tree_exited", self, "RemoveUnit", [unit])
@@ -93,6 +95,12 @@ func RemoveUnit(unit:GraphUnit)->void:
 func MoveUnits(offset:Vector2)->void:
 	for unit in unitList:
 		unit.rect_position += offset
+
+func UnitSelected(newUnit:GraphUnit)->void:
+	if (unitSelected != null):
+		unitSelected.state = GraphUnit.NORMAL
+	unitSelected = newUnit
+	unitSelected.state = GraphUnit.SELECTED
 
 func UnitChanged(unit:GraphUnit)->void:
 	### OPTIMIZE SHRINK & EXTEND

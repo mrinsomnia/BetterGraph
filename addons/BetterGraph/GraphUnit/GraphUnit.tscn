@@ -1,20 +1,12 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://addons/BetterGraph/GraphUnit/GraphUnit.gd" type="Script" id=1]
+[ext_resource path="res://addons/BetterGraph/Styles/UnitNormal.tres" type="StyleBox" id=2]
+[ext_resource path="res://addons/BetterGraph/Styles/UnitSelected.tres" type="StyleBox" id=3]
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
-[sub_resource type="StyleBoxFlat" id=2]
-bg_color = Color( 0.180392, 0.219608, 0.25098, 1 )
-border_width_top = 16
-border_color = Color( 1, 0.294118, 0.2, 1 )
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-shadow_color = Color( 0, 0, 0, 0.219608 )
-shadow_size = 1
-shadow_offset = Vector2( 2, 2 )
+[sub_resource type="StyleBoxEmpty" id=2]
 
 [sub_resource type="StyleBoxEmpty" id=3]
 
@@ -24,9 +16,7 @@ shadow_offset = Vector2( 2, 2 )
 
 [sub_resource type="StyleBoxEmpty" id=6]
 
-[sub_resource type="StyleBoxEmpty" id=7]
-
-[sub_resource type="GDScript" id=8]
+[sub_resource type="GDScript" id=7]
 script/source = "extends SpinBox
 
 func _ready():
@@ -34,7 +24,7 @@ func _ready():
 	connect(\"value_changed\", owner, \"SetInputs\")
 "
 
-[sub_resource type="GDScript" id=9]
+[sub_resource type="GDScript" id=8]
 script/source = "extends SpinBox
 
 func _ready():
@@ -54,13 +44,15 @@ inputCount = 3
 outputCount = 4
 inputParentPath = NodePath("VBoxContainer/HBoxContainer/InputParent")
 outputParentPath = NodePath("VBoxContainer/HBoxContainer/OutputParent")
+panelPath = NodePath("Panel")
+styleList = [ ExtResource( 2 ), ExtResource( 3 ) ]
 
 [node name="Panel" type="Panel" parent="."]
 margin_right = 96.0
 margin_bottom = 92.0
 rect_min_size = Vector2( 64, 0 )
 mouse_filter = 2
-custom_styles/panel = SubResource( 2 )
+custom_styles/panel = ExtResource( 2 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 margin_right = 96.0
@@ -85,16 +77,15 @@ margin_left = 88.0
 margin_right = 96.0
 margin_bottom = 14.0
 size_flags_vertical = 0
+custom_styles/hover = SubResource( 2 )
+custom_styles/pressed = SubResource( 3 )
+custom_styles/focus = SubResource( 4 )
+custom_styles/disabled = SubResource( 5 )
+custom_styles/normal = SubResource( 6 )
 custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
-custom_colors/font_color_focus = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
 custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
-custom_styles/hover = SubResource( 3 )
-custom_styles/pressed = SubResource( 4 )
-custom_styles/focus = SubResource( 5 )
-custom_styles/disabled = SubResource( 6 )
-custom_styles/normal = SubResource( 7 )
 text = "X"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
@@ -117,7 +108,7 @@ mouse_filter = 2
 margin_right = 88.0
 margin_bottom = 24.0
 suffix = "in"
-script = SubResource( 8 )
+script = SubResource( 7 )
 
 [node name="OutputSetter" type="SpinBox" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
 margin_top = 28.0
@@ -125,7 +116,7 @@ margin_right = 88.0
 margin_bottom = 52.0
 rect_min_size = Vector2( 88, 0 )
 suffix = "out"
-script = SubResource( 9 )
+script = SubResource( 8 )
 
 [node name="OutputParent" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
 margin_left = 96.0
