@@ -1,20 +1,9 @@
 [gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://addons/BetterGraph/GraphUnit/GraphUnit.gd" type="Script" id=1]
+[ext_resource path="res://addons/BetterGraph/Styles/GraphUnit.tres" type="StyleBox" id=2]
 
 [sub_resource type="StyleBoxEmpty" id=1]
-
-[sub_resource type="StyleBoxFlat" id=2]
-bg_color = Color( 0.180392, 0.219608, 0.25098, 1 )
-border_width_top = 16
-border_color = Color( 1, 0.294118, 0.2, 1 )
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-shadow_color = Color( 0, 0, 0, 0.219608 )
-shadow_size = 1
-shadow_offset = Vector2( 2, 2 )
 
 [sub_resource type="StyleBoxEmpty" id=3]
 
@@ -61,7 +50,7 @@ margin_right = 96.0
 margin_bottom = 92.0
 rect_min_size = Vector2( 64, 0 )
 mouse_filter = 2
-custom_styles/panel = SubResource( 2 )
+custom_styles/panel = ExtResource( 2 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 margin_right = 96.0

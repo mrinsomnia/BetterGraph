@@ -1,4 +1,4 @@
-extends "GraphUnit.gd"
+extends "GraphFlowUnit.gd"
 class_name GraphSceneUnit
 
 

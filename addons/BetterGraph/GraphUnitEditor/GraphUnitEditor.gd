@@ -6,6 +6,9 @@ onready var hScroll: = $HScrollBar
 onready var vScroll: = $VScrollBar
 onready var board: = $Board
 onready var connectionDraw: = get_node(connectionDrawPath)
+onready var InfoCurrent: = $Board/Info/VBoxContainer/HBoxContainer/CurrentValue
+onready var InfoColorFirst: = $Board/Info/VBoxContainer/HBoxContainer2/ColorFirst
+
 
 var unitDictionary:Dictionary
 var unitList:Array
@@ -177,3 +180,8 @@ func ConnectionsRemoved(list:Array)->void:
 	connectionDraw.update()
 
 
+
+
+func _on_ColorFirst_pressed():
+	unitList.front().ChangeStyle()
+	pass # Replace with function body.

@@ -18,7 +18,7 @@ func _start()->void:
 	AudioStreamPlayer.play()
 
 func _on_AudioStreamPlayer_finished():
-	print("mi papa: ",str(my_parent))
+#	print("mi papa: ",str(my_parent))
 	my_parent._finish()
 
 

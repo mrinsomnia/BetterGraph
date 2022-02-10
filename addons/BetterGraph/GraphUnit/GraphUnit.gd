@@ -7,9 +7,6 @@ signal OutputPressed
 signal Disconnect
 signal ConnectionsRemoved
 signal DrawConnections
-###---Belly stuff---###
-signal BellyStart
-signal BellyFinish
 
 
 export var inputCount:int setget SetInputs
@@ -22,15 +19,16 @@ export var unitBellyPath:NodePath
 onready var inputParent: = get_node(inputParentPath)
 onready var outputParent: = get_node(outputParentPath)
 onready var parent:Node = get_parent()
+###---Belly stuff---###
 onready var unitBelly: = get_node(unitBellyPath)
+onready var UnitStylePanel:Node = $Panel
+
 
 var isDragged: = false
 var inputs:Array = []
 var outputs:Array = []
 var connectionsIn:Dictionary = {}	#data list array by output key
 var connectionsOut:Dictionary = {}	#data list array by output key
-###---Belly stuff---###
-var containedScene = null
 
 func SetInputs(value:int)->void:
 	if value < 0:
@@ -86,8 +84,8 @@ func _ready()->void:
 	outputCount = 0
 	SetInputs(inC)
 	SetOutputs(outC)
-	connect("BellyStart", self, "BellyStart")
-	connect("BellyFinish", self, "BellyFinish")
+	
+	
 
 func _gui_input(event:InputEvent)->void:
 	if event is InputEventMouseButton:
@@ -225,24 +223,3 @@ func RemoveSelf()->void:
 # Chance to check if connection is valid
 func ConnectionValidation(data:Dictionary)->bool:
 	return !ConnectionExists(data)
-
-func InjectScene(_instance)->void:
-	
-	unitBelly.add_child(_instance)
-	_instance.add_parent(self)
-	containedScene = _instance
-
-func BellyStart(_mirror)->void:
-#	if _mirror != self:
-	containedScene._start()
-
-func BellyFinish()->void:
-	print("BellyFinish triggered!!!")
-	var connKeys = connectionsOut.keys()
-	for conn in connKeys:
-		var ass = connectionsOut[conn]
-		for poop in ass:
-			poop["unitIn"].BellyStart(self)
-	
-	pass
-
