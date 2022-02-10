@@ -29,6 +29,7 @@ var inputs:Array = []
 var outputs:Array = []
 var connectionsIn:Dictionary = {}	#data list array by output key
 var connectionsOut:Dictionary = {}	#data list array by output key
+var UnitBoardEditor = null
 
 func SetInputs(value:int)->void:
 	if value < 0:
@@ -84,7 +85,7 @@ func _ready()->void:
 	outputCount = 0
 	SetInputs(inC)
 	SetOutputs(outC)
-	
+#	UnitBoardEditor = self.get_parent().get_parent()
 	
 
 func _gui_input(event:InputEvent)->void:
@@ -223,3 +224,11 @@ func RemoveSelf()->void:
 # Chance to check if connection is valid
 func ConnectionValidation(data:Dictionary)->bool:
 	return !ConnectionExists(data)
+
+# Adding place where Unit exists, probs should be done in ready
+func SetBoard(_board)->void:
+	UnitBoardEditor = _board
+
+# Bless the Unit for it to proceed w/ it's inherited duties
+func Bless()->void:
+	pass

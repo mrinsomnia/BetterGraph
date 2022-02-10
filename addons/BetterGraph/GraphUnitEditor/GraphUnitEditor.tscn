@@ -45,7 +45,7 @@ __meta__ = {
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 120.0
-margin_bottom = 49.0
+margin_bottom = 73.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Board/Info/VBoxContainer"]
 margin_right = 113.0
@@ -67,10 +67,17 @@ margin_top = 18.0
 margin_right = 113.0
 margin_bottom = 42.0
 
-[node name="ColorFirst" type="CheckBox" parent="Board/Info/VBoxContainer/HBoxContainer2"]
-margin_right = 89.0
+[node name="HaltFirst" type="CheckBox" parent="Board/Info/VBoxContainer/HBoxContainer2"]
+margin_right = 101.0
 margin_bottom = 24.0
-text = "color first"
+pressed = true
+text = "halt on first"
+
+[node name="StartFirst" type="Button" parent="Board/Info/VBoxContainer"]
+margin_top = 46.0
+margin_right = 113.0
+margin_bottom = 66.0
+text = "Start first"
 
 [node name="VScrollBar" type="VScrollBar" parent="."]
 anchor_left = 1.0
@@ -92,4 +99,4 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[connection signal="pressed" from="Board/Info/VBoxContainer/HBoxContainer2/ColorFirst" to="." method="_on_ColorFirst_pressed"]
+[connection signal="pressed" from="Board/Info/VBoxContainer/StartFirst" to="." method="_on_StartFirst_pressed"]
