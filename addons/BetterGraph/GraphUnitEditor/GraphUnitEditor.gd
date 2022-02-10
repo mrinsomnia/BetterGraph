@@ -182,6 +182,8 @@ func ConnectionsRemoved(list:Array)->void:
 				break
 	connectionDraw.update()
 
-
-func _on_StartFirst_pressed():
+func _on_StartFirst_pressed()->void:
 	unitList.front().BellyStart(null)
+
+func UpdateInfoCurrent(_nodeName)->void:
+	InfoCurrent.text = _nodeName

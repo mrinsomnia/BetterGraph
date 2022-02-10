@@ -19,6 +19,7 @@ export var unitBellyPath:NodePath
 onready var inputParent: = get_node(inputParentPath)
 onready var outputParent: = get_node(outputParentPath)
 onready var parent:Node = get_parent()
+onready var UnitName:Node = $VBoxContainer/Top/Label
 ###---Belly stuff---###
 onready var unitBelly: = get_node(unitBellyPath)
 onready var UnitStylePanel:Node = $Panel
@@ -228,6 +229,7 @@ func ConnectionValidation(data:Dictionary)->bool:
 # Adding place where Unit exists, probs should be done in ready
 func SetBoard(_board)->void:
 	UnitBoardEditor = _board
+	UnitName.text = str("Unit #", UnitBoardEditor.unitList.size() + 1)
 
 # Bless the Unit for it to proceed w/ it's inherited duties
 func Bless()->void:

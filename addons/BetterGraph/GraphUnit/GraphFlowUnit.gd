@@ -20,7 +20,6 @@ onready var UnitStyleFirst: = load("res://addons/BetterGraph/Styles/GraphUnitFir
 
 ###---Belly stuff---###
 var containedScene = null
-var isRunning: = false
 
 func _ready()->void:
 	SetInputs(1)
@@ -42,16 +41,13 @@ func InjectScene(_instance)->void:
 func BellyStart(_mirror)->void:
 	if (_mirror != null && UnitBoardEditor.unitList.front() == self && UnitBoardEditor.InfoHaltFirst.pressed):
 		return
-	isRunning = true
 	ChangeStyle(UnitStyles.active)
+	UnitBoardEditor.UpdateInfoCurrent(UnitName.text)
 	if containedScene != null:
 		containedScene._start()
 
 func BellyFinish()->void:
-	var teet = UnitBoardEditor.unitList.front()
-	
 	print("BellyFinish triggered!!!")
-	isRunning = false
 	ChangeStyle(UnitStyles.default)
 	var connKeys = connectionsOut.keys()
 	for conn in connKeys:
