@@ -17,7 +17,7 @@ var connections:Dictionary
 var scrollMargin:Vector2
 var boardArea:Rect2
 var unitSelected:GraphUnit = null
-
+var scrollMove: = Vector2.ZERO
 
 func _ready()->void:
 # warning-ignore:return_value_discarded
@@ -81,6 +81,9 @@ func UpdateScrollBars()->void:
 	vScroll.max_value = boardArea.size.y
 	hScroll.page = rect_size.x - scrollMargin.x
 	vScroll.page = rect_size.y - scrollMargin.y
+	hScroll.value += scrollMove.x
+	vScroll.value += scrollMove.y
+	scrollMove = Vector2.ZERO
 	connectionDraw.rect_size = boardArea.size
 
 func HScrolling()->void:
@@ -113,10 +116,12 @@ func UnitChanged(unit:GraphUnit)->void:
 		boardArea.position.y = pos.y
 	
 	if pos2.x > boardPos2.x:
-		boardArea.size.x += pos2.x - boardPos2.x
+		scrollMove.x = pos2.x - boardPos2.x
+		boardArea.size.x += scrollMove.x
 	
 	if pos2.y > boardPos2.y:
-		boardArea.size.y += pos2.y - boardPos2.y
+		scrollMove.y = pos2.y - boardPos2.y
+		boardArea.size.y += scrollMove.y
 	
 	UpdateEditor()
 
