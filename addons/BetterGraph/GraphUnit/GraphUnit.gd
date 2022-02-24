@@ -42,8 +42,9 @@ func SetInputs(value:int)->void:
 		inputCount = value
 		return
 	if inputCount < value:
+		var inst:Button
 		for i in (value - inputCount):
-			var inst:Button = inputConnectorScene.instance()
+			inst = inputConnectorScene.instance()
 			inputParent.add_child(inst)
 # warning-ignore:return_value_discarded
 			inst.connect("pressed", self, "InputPressed", [inst, inputs.size()])
@@ -65,8 +66,9 @@ func SetOutputs(value:int)->void:
 		outputCount = value
 		return
 	if outputCount < value:
+		var inst:Button
 		for i in (value - outputCount):
-			var inst:Button = outputConnectorScene.instance()
+			inst = outputConnectorScene.instance()
 			outputParent.add_child(inst)
 # warning-ignore:return_value_discarded
 			inst.connect("pressed", self, "OutputPressed", [inst, outputs.size()])
