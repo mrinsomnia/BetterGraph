@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://addons/BetterGraph/GraphUnitEditor/TopLayer.gd" type="Script" id=1]
+[ext_resource path="res://addons/BetterGraph/GraphUnitEditor/ConnectionDraw.gd" type="Script" id=1]
 [ext_resource path="res://addons/BetterGraph/GraphUnitEditor/GraphUnitEditor.gd" type="Script" id=2]
 
 [sub_resource type="StyleBoxFlat" id=1]
@@ -14,22 +14,30 @@ script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-connectionDrawPath = NodePath("Board/ConnectionDraw")
+connectionDrawPath = NodePath("Panel/ConnectionDraw")
+boardPath = NodePath("Panel/Board")
 
-[node name="Board" type="Panel" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="Panel" type="Panel" parent="."]
+margin_right = 1280.0
+margin_bottom = 720.0
 mouse_filter = 2
 custom_styles/panel = SubResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ConnectionDraw" type="Control" parent="Board"]
+[node name="ConnectionDraw" type="Control" parent="Panel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Board" type="Control" parent="Panel"]
+margin_right = 40.0
+margin_bottom = 40.0
 __meta__ = {
 "_edit_use_anchors_": false
 }

@@ -10,14 +10,17 @@ func _draw()->void:
 		for data in list:
 			var output:Button = data.unitOut.outputs[data.output]
 			var input:Button = data.unitIn.inputs[data.input]
-			draw_line_bezier_cubic(
+			draw_connection(
 				output.rect_global_position + output.rect_size * 0.5 - rect_global_position,
 				input.rect_global_position + input.rect_size * 0.5 - rect_global_position,
 				output.modulate,
 				input.modulate
 			)
 
+func draw_connection(startPos:Vector2, endPos:Vector2, colorFrom:Color, colorTo:Color)->void:
+	draw_line_bezier_cubic(startPos, endPos, colorFrom, colorTo)
 
+# built-in
 func draw_line_bezier_cubic(startPos:Vector2, endPos:Vector2, colorFrom:Color, colorTo:Color)->void:
 	var previous:Vector2 = startPos
 # warning-ignore:unassigned_variable

@@ -7,17 +7,27 @@ signal OutputPressed
 signal Disconnect
 signal ConnectionsRemoved
 signal DrawConnections
+signal UnitSelected
 
 export var inputCount:int setget SetInputs
 export var outputCount:int setget SetOutputs
 export var inputParentPath:NodePath
 export var outputParentPath:NodePath
+export var panelPath:NodePath
 export var connectorScene:PackedScene = preload("res://addons/BetterGraph/UnitConnector/Connector.tscn")
+export (Array, Resource) var styleList:Array
 
 onready var inputParent: = get_node(inputParentPath)
 onready var outputParent: = get_node(outputParentPath)
+onready var panel: = get_node(panelPath)
 onready var parent:Node = get_parent()
 
+enum {
+	NORMAL,
+	SELECTED,
+}
+
+var state = NORMAL setget set_state
 var isDragged: = false
 var inputs:Array = []
 var outputs:Array = []
@@ -71,6 +81,12 @@ func SetOutputs(value:int)->void:
 			# TO-DO: check if connections exists
 	outputCount = value
 
+func set_state(value:int)->void:
+	if(state != value):
+		state = value
+		var newStyle = styleList[value]
+		panel.set("custom_styles/panel", newStyle)
+
 func _ready()->void:
 	var inC = inputCount
 	var outC = outputCount
@@ -84,12 +100,13 @@ func _gui_input(event:InputEvent)->void:
 		if event.button_index == 1:
 			if event.pressed && !isDragged:
 				isDragged = true
+				emit_signal("UnitSelected", self)	#	<-- Editor verify change for now
 				parent.move_child(self, parent.get_child_count() -1)
 			if !event.pressed && isDragged:
 				isDragged = false
 	elif event is InputEventMouseMotion && isDragged:
 		rect_position += event.relative
-		emit_signal("UnitChanged", self, rect_position, rect_size)
+		emit_signal("UnitChanged", self)
 
 
 func InputPressed(_connector:Button, index:int)->void:
