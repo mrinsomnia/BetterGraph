@@ -38,6 +38,9 @@ __meta__ = {
 [node name="Board" type="Control" parent="Panel"]
 margin_right = 40.0
 margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="VScrollBar" type="VScrollBar" parent="."]
 anchor_left = 1.0
