@@ -14,7 +14,8 @@ export var outputCount:int setget SetOutputs
 export var inputParentPath:NodePath
 export var outputParentPath:NodePath
 export var panelPath:NodePath
-export var connectorScene:PackedScene = preload("res://addons/BetterGraph/UnitConnector/Connector.tscn")
+export var inputConnectorScene:PackedScene = preload("res://addons/BetterGraph/UnitConnector/Connector.tscn")
+export var outputConnectorScene:PackedScene = preload("res://addons/BetterGraph/UnitConnector/Connector.tscn")
 export (Array, Resource) var styleList:Array
 
 onready var inputParent: = get_node(inputParentPath)
@@ -42,7 +43,7 @@ func SetInputs(value:int)->void:
 		return
 	if inputCount < value:
 		for i in (value - inputCount):
-			var inst:Button = connectorScene.instance()
+			var inst:Button = inputConnectorScene.instance()
 			inputParent.add_child(inst)
 # warning-ignore:return_value_discarded
 			inst.connect("pressed", self, "InputPressed", [inst, inputs.size()])
@@ -65,7 +66,7 @@ func SetOutputs(value:int)->void:
 		return
 	if outputCount < value:
 		for i in (value - outputCount):
-			var inst:Button = connectorScene.instance()
+			var inst:Button = outputConnectorScene.instance()
 			outputParent.add_child(inst)
 # warning-ignore:return_value_discarded
 			inst.connect("pressed", self, "OutputPressed", [inst, outputs.size()])
