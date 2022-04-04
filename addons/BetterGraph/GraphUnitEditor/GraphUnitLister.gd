@@ -211,7 +211,7 @@ func UnitDragged(unit:GraphUnit, _pos:Vector2)->void:
 	if unit == null:
 		# iterate through Units to check if released on a node for a new Connection
 		for _unit in unitList:
-			if _unit.get_global_rect().has_point(draggedUnit.rect_global_position + pos_mouse):
+			if _unit.get_global_rect().has_point(pos_mouse):
 				InputPressed(_unit, 0)
 		
 		draggedUnit = null

@@ -37,6 +37,6 @@ func _gui_input(event:InputEvent)->void:
 				isDragged = false
 				emit_signal("UnitDragged", null, Vector2.ZERO)
 	elif event is InputEventMouseMotion && isDragged:
-		emit_signal("UnitDragged", self, event.position)
+		emit_signal("UnitDragged", self, self.rect_global_position + event.position)
 		if outputs.size() > 0:
 			emit_signal("OutputPressed", self, 0)

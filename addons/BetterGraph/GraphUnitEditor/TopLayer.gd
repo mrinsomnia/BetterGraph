@@ -18,11 +18,10 @@ func _draw()->void:
 			)
 	if owner.draggedUnit != null:
 		var output:Button = owner.draggedUnit.outputs.front()
-		var pos_mouse = owner.pos_mouse
 		if output != null:
 			draw_line_bezier_cubic(
 				output.rect_global_position + output.rect_size * 0.5 - rect_global_position,
-				owner.draggedUnit.rect_global_position + pos_mouse,
+				owner.pos_mouse,
 				output.modulate,
 				Color.white
 			)
