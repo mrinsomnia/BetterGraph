@@ -14,6 +14,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/BetterGraph/UnitConnector/Connector.gd"
 }, {
+"base": "",
+"class": "GraphFlowUnit",
+"language": "GDScript",
+"path": "res://addons/BetterGraph/GraphUnit/GraphFlowUnit.gd"
+}, {
+"base": "",
+"class": "GraphSceneUnit",
+"language": "GDScript",
+"path": "res://addons/BetterGraph/GraphUnit/GraphSceneUnit.gd"
+}, {
 "base": "PanelContainer",
 "class": "GraphUnit",
 "language": "GDScript",
@@ -21,13 +31,15 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "Connector": "",
+"GraphFlowUnit": "",
+"GraphSceneUnit": "",
 "GraphUnit": ""
 }
 
 [application]
 
 config/name="BetterGraph"
-run/main_scene="res://App/App.tscn"
+run/main_scene="res://addons/BetterGraph/examples/App.tscn"
 config/icon="res://icon.png"
 
 [display]

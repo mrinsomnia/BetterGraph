@@ -8,21 +8,29 @@ signal Disconnect
 signal ConnectionsRemoved
 signal DrawConnections
 
+
 export var inputCount:int setget SetInputs
 export var outputCount:int setget SetOutputs
 export var inputParentPath:NodePath
 export var outputParentPath:NodePath
 export var connectorScene:PackedScene = preload("res://addons/BetterGraph/UnitConnector/Connector.tscn")
+export var unitBellyPath:NodePath
 
 onready var inputParent: = get_node(inputParentPath)
 onready var outputParent: = get_node(outputParentPath)
 onready var parent:Node = get_parent()
+onready var UnitName:Node = $VBoxContainer/Top/Label
+###---Belly stuff---###
+onready var unitBelly: = get_node(unitBellyPath)
+onready var UnitStylePanel:Node = $Panel
+
 
 var isDragged: = false
 var inputs:Array = []
 var outputs:Array = []
 var connectionsIn:Dictionary = {}	#data list array by output key
 var connectionsOut:Dictionary = {}	#data list array by output key
+var UnitBoardEditor = null
 
 func SetInputs(value:int)->void:
 	if value < 0:
@@ -78,6 +86,8 @@ func _ready()->void:
 	outputCount = 0
 	SetInputs(inC)
 	SetOutputs(outC)
+#	UnitBoardEditor = self.get_parent().get_parent()
+	
 
 func _gui_input(event:InputEvent)->void:
 	if event is InputEventMouseButton:
@@ -216,9 +226,11 @@ func RemoveSelf()->void:
 func ConnectionValidation(data:Dictionary)->bool:
 	return !ConnectionExists(data)
 
+# Adding place where Unit exists, probs should be done in ready
+func SetBoard(_board)->void:
+	UnitBoardEditor = _board
+	UnitName.text = str("Unit #", UnitBoardEditor.unitList.size() + 1)
 
-
-
-
-
-
+# Bless the Unit for it to proceed w/ it's inherited duties
+func Bless()->void:
+	pass

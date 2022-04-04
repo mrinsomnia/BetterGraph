@@ -6,6 +6,9 @@ onready var hScroll: = $HScrollBar
 onready var vScroll: = $VScrollBar
 onready var board: = $Board
 onready var connectionDraw: = get_node(connectionDrawPath)
+onready var InfoCurrent: = $Board/Info/VBoxContainer/HBoxContainer/CurrentValue
+onready var InfoHaltFirst: = $Board/Info/VBoxContainer/HBoxContainer2/HaltFirst
+
 
 var unitDictionary:Dictionary
 var unitList:Array
@@ -14,6 +17,7 @@ var inputSelected:Dictionary
 var outputSelected:Dictionary
 var connections:Dictionary
 var scrollMargin:Vector2
+
 
 
 func _ready()->void:
@@ -54,6 +58,7 @@ func VScrolling()->void:
 
 func AddUnit(unit:GraphUnit, pos:Vector2 = Vector2.ZERO)->void:
 	board.add_child(unit)
+	unit.SetBoard(self)
 	unit.rect_position = pos + Vector2(hScroll.value, vScroll.value)
 	unitDictionary[unit.name] = unit
 	unitList.append(unit)
@@ -72,6 +77,7 @@ func AddUnit(unit:GraphUnit, pos:Vector2 = Vector2.ZERO)->void:
 	unit.connect("ConnectionsRemoved", self, "ConnectionsRemoved")
 # warning-ignore:return_value_discarded
 	unit.connect("DrawConnections", connectionDraw, "update")
+	unit.Bless()
 	
 
 func RemoveUnit(unit:GraphUnit)->void:
@@ -176,4 +182,8 @@ func ConnectionsRemoved(list:Array)->void:
 				break
 	connectionDraw.update()
 
+func _on_StartFirst_pressed()->void:
+	unitList.front().BellyStart(null)
 
+func UpdateInfoCurrent(_nodeName)->void:
+	InfoCurrent.text = _nodeName
