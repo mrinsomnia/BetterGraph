@@ -15,6 +15,7 @@ export var inputParentPath:NodePath
 export var outputParentPath:NodePath
 export var connectorScene:PackedScene = preload("res://addons/BetterGraph/UnitConnector/Connector.tscn")
 export var unitBellyPath:NodePath
+export var handleGUIinBase:bool = true
 
 onready var inputParent: = get_node(inputParentPath)
 onready var outputParent: = get_node(outputParentPath)
@@ -90,16 +91,17 @@ func _ready()->void:
 	
 
 func _gui_input(event:InputEvent)->void:
-	if event is InputEventMouseButton:
-		if event.button_index == 1:
-			if event.pressed && !isDragged:
-				isDragged = true
-				parent.move_child(self, parent.get_child_count() -1)
-			if !event.pressed && isDragged:
-				isDragged = false
-	elif event is InputEventMouseMotion && isDragged:
-		rect_position += event.relative
-		emit_signal("UnitChanged", self, rect_position, rect_size)
+	if handleGUIinBase:
+		if event is InputEventMouseButton:
+			if event.button_index == 1:
+				if event.pressed && !isDragged:
+					isDragged = true
+					parent.move_child(self, parent.get_child_count() -1)
+				if !event.pressed && isDragged:
+					isDragged = false
+		elif event is InputEventMouseMotion && isDragged:
+			rect_position += event.relative
+			emit_signal("UnitChanged", self, rect_position, rect_size)
 
 
 func InputPressed(_connector:Button, index:int)->void:

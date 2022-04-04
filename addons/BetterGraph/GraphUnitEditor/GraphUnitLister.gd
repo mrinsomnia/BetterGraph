@@ -1,14 +1,12 @@
 extends Control
 
 export var connectionDrawPath:NodePath
+export var unitScene:PackedScene = preload("res://addons/BetterGraph/GraphUnit/GraphUnitNaked.tscn")
 
 onready var hScroll: = $HScrollBar
 onready var vScroll: = $VScrollBar
 onready var board: = $Board
 onready var connectionDraw: = get_node(connectionDrawPath)
-onready var InfoCurrent: = $Board/Info/VBoxContainer/HBoxContainer/CurrentValue
-onready var InfoHaltFirst: = $Board/Info/VBoxContainer/HBoxContainer2/HaltFirst
-
 
 var unitDictionary:Dictionary
 var unitList:Array
@@ -17,6 +15,11 @@ var inputSelected:Dictionary
 var outputSelected:Dictionary
 var connections:Dictionary
 var scrollMargin:Vector2
+
+var draggedUnit:GraphUnit = null
+var pos_mouse:Vector2 = Vector2.ZERO
+var leftList:Array = []
+var rightList:Array = []
 
 
 func _ready()->void:
@@ -27,6 +30,8 @@ func _ready()->void:
 	scrollMargin = Vector2(vScroll.rect_size.x, hScroll.rect_size.y)
 	board.rect_size = rect_size - scrollMargin
 	UpdateScrollBars()
+	AddToLeft(2, "RealValue")
+	AddToLeft(3, "ARealValue")
 
 func _gui_input(event:InputEvent)->void:
 	if event is InputEventMouseButton:
@@ -75,7 +80,10 @@ func AddUnit(unit:GraphUnit, pos:Vector2 = Vector2.ZERO)->void:
 # warning-ignore:return_value_discarded
 	unit.connect("ConnectionsRemoved", self, "ConnectionsRemoved")
 # warning-ignore:return_value_discarded
+	unit.connect("UnitDragged", self, "UnitDragged")
+# warning-ignore:return_value_discarded
 	unit.connect("DrawConnections", connectionDraw, "update")
+	
 	unit.Bless()
 	
 
@@ -184,5 +192,35 @@ func ConnectionsRemoved(list:Array)->void:
 func _on_StartFirst_pressed()->void:
 	unitList.front().BellyStart(null)
 
-func UpdateInfoCurrent(_nodeName)->void:
-	InfoCurrent.text = _nodeName
+func AddToLeft(_id:int, _name:String)->void:
+	if _id < 0 || !_name.is_valid_identifier():
+		print("ERR - ID or Name of GraphUnitNaked is not valid!")
+		return
+	# iterate through _list and add as Units
+	# element = ID & Name = GraphUnitNaked.tscn
+	var _unit = unitScene.instance()
+	_unit.unitID = _id
+	_unit.unitName = _name
+	_unit.inputCount = 1
+	_unit.outputCount = 1
+	
+	self.AddUnit(_unit, Vector2(100,100*(leftList.size()+1)))
+	leftList.append(_unit)
+
+func UnitDragged(unit:GraphUnit, _pos:Vector2)->void:
+	if unit == null:
+		# iterate through Units to check if released on a node for a new Connection
+		for _unit in unitList:
+			if _unit.get_global_rect().has_point(draggedUnit.rect_global_position + pos_mouse):
+				InputPressed(_unit, 0)
+		
+		draggedUnit = null
+		pos_mouse = Vector2.ZERO
+		
+	else:
+		draggedUnit = unit
+		pos_mouse = _pos
+	
+	connectionDraw.update()
+
+

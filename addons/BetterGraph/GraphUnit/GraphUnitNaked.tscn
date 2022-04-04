@@ -1,0 +1,103 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://addons/BetterGraph/GraphUnit/GraphUnitNaked.gd" type="Script" id=1]
+[ext_resource path="res://addons/BetterGraph/Styles/GraphUnit.tres" type="StyleBox" id=2]
+
+[sub_resource type="StyleBoxEmpty" id=1]
+
+[sub_resource type="StyleBoxEmpty" id=3]
+
+[sub_resource type="StyleBoxEmpty" id=4]
+
+[sub_resource type="StyleBoxEmpty" id=5]
+
+[sub_resource type="StyleBoxEmpty" id=6]
+
+[sub_resource type="StyleBoxEmpty" id=7]
+
+[node name="GraphUnitNaked" type="PanelContainer"]
+margin_right = 28.0
+margin_bottom = 92.0
+custom_styles/panel = SubResource( 1 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+inputParentPath = NodePath("VBoxContainer/HBoxContainer/InputParent")
+outputParentPath = NodePath("VBoxContainer/HBoxContainer/OutputParent")
+unitBellyPath = NodePath("VBoxContainer/HBoxContainer/VBoxContainer")
+
+[node name="Panel" type="Panel" parent="."]
+margin_right = 99.0
+margin_bottom = 92.0
+rect_min_size = Vector2( 64, 0 )
+mouse_filter = 2
+custom_styles/panel = ExtResource( 2 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_right = 99.0
+margin_bottom = 92.0
+mouse_filter = 2
+
+[node name="Top" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 99.0
+margin_bottom = 14.0
+mouse_filter = 2
+size_flags_horizontal = 3
+custom_constants/separation = 2
+
+[node name="MarginLeft" type="Control" parent="VBoxContainer/Top"]
+margin_right = 10.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 10, 0 )
+
+[node name="Label" type="Label" parent="VBoxContainer/Top"]
+margin_left = 12.0
+margin_right = 77.0
+margin_bottom = 14.0
+size_flags_horizontal = 11
+text = "UnitName"
+
+[node name="MarginRight" type="Control" parent="VBoxContainer/Top"]
+margin_left = 79.0
+margin_right = 89.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 10, 0 )
+
+[node name="Button" type="Button" parent="VBoxContainer/Top"]
+margin_left = 91.0
+margin_right = 99.0
+margin_bottom = 14.0
+size_flags_vertical = 0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color_focus = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+custom_styles/hover = SubResource( 3 )
+custom_styles/pressed = SubResource( 4 )
+custom_styles/focus = SubResource( 5 )
+custom_styles/disabled = SubResource( 6 )
+custom_styles/normal = SubResource( 7 )
+text = "X"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 18.0
+margin_right = 99.0
+margin_bottom = 18.0
+mouse_filter = 2
+
+[node name="InputParent" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+size_flags_horizontal = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+margin_left = 49.0
+margin_right = 49.0
+mouse_filter = 2
+
+[node name="OutputParent" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+margin_left = 99.0
+margin_right = 99.0
+size_flags_horizontal = 10
+
+[connection signal="pressed" from="VBoxContainer/Top/Button" to="." method="RemoveSelf"]
