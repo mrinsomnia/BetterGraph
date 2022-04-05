@@ -30,8 +30,12 @@ func _ready()->void:
 	scrollMargin = Vector2(vScroll.rect_size.x, hScroll.rect_size.y)
 	board.rect_size = rect_size - scrollMargin
 	UpdateScrollBars()
+	
 	AddToLeft(2, "RealValue")
 	AddToLeft(3, "ARealValue")
+	AddToRight(5, "BestValue")
+	AddToRight(88, "ZeBestValue")
+	AddToRight(28, "ZeBestValuez")
 
 func _gui_input(event:InputEvent)->void:
 	if event is InputEventMouseButton:
@@ -192,6 +196,10 @@ func ConnectionsRemoved(list:Array)->void:
 func _on_StartFirst_pressed()->void:
 	unitList.front().BellyStart(null)
 
+
+func GetPosXLeft()->float:
+	return (connectionDraw.rect_size.x * 0.1)
+
 func AddToLeft(_id:int, _name:String)->void:
 	if _id < 0 || !_name.is_valid_identifier():
 		print("ERR - ID or Name of GraphUnitNaked is not valid!")
@@ -201,26 +209,58 @@ func AddToLeft(_id:int, _name:String)->void:
 	var _unit = unitScene.instance()
 	_unit.unitID = _id
 	_unit.unitName = _name
-	_unit.inputCount = 1
 	_unit.outputCount = 1
 	
-	self.AddUnit(_unit, Vector2(100,100*(leftList.size()+1)))
+	var pos_x = GetPosXLeft()
+	
+	self.AddUnit(_unit, Vector2(pos_x,100*(leftList.size()+1)))
 	leftList.append(_unit)
+
+func GetPosXRight()->float:
+	return (connectionDraw.rect_size.x * 0.55)
+
+func AddToRight(_id:int, _name:String)->void:
+	if _id < 0 || !_name.is_valid_identifier():
+		print("ERR - ID or Name of GraphUnitNaked is not valid!")
+		return
+	# iterate through _list and add as Units
+	# element = ID & Name = GraphUnitNaked.tscn
+	var _unit = unitScene.instance()
+	_unit.unitID = _id
+	_unit.unitName = _name
+	_unit.inputCount = 1
+	
+	var pos_x = GetPosXRight()
+	
+	AddUnit(_unit, Vector2(pos_x,100*(rightList.size()+1)))
+	rightList.append(_unit)
 
 func UnitDragged(unit:GraphUnit, _pos:Vector2)->void:
 	if unit == null:
 		# iterate through Units to check if released on a node for a new Connection
 		for _unit in unitList:
 			if _unit.get_global_rect().has_point(pos_mouse):
-				InputPressed(_unit, 0)
+				if _unit.outputs.front() != null:
+					OutputPressed(_unit, 0)
+				elif _unit.inputs.front() != null:
+					InputPressed(_unit, 0)
 		
 		draggedUnit = null
 		pos_mouse = Vector2.ZERO
-		
 	else:
 		draggedUnit = unit
 		pos_mouse = _pos
 	
 	connectionDraw.update()
 
-
+func _on_GraphUnitLister_resized():
+	for _unit in leftList:
+		var pos_x = GetPosXLeft()
+		_unit.rect_position.x = pos_x
+	
+	for _unit in rightList:
+		var pos_x = GetPosXRight()
+		_unit.rect_position.x = pos_x
+		print(connectionDraw.rect_size.x)
+	
+	

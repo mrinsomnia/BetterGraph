@@ -40,3 +40,5 @@ func _gui_input(event:InputEvent)->void:
 		emit_signal("UnitDragged", self, self.rect_global_position + event.position)
 		if outputs.size() > 0:
 			emit_signal("OutputPressed", self, 0)
+		elif inputs.size() > 0:
+			emit_signal("InputPressed", self, 0)
