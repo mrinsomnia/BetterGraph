@@ -26,7 +26,7 @@ onready var unitBelly: = get_node(unitBellyPath)
 onready var UnitStylePanel:Node = $Panel
 
 
-var isDragged: = false
+var isSelected: = false
 var inputs:Array = []
 var outputs:Array = []
 var connectionsIn:Dictionary = {}	#data list array by output key
@@ -94,12 +94,12 @@ func _gui_input(event:InputEvent)->void:
 	if handleGUIinBase:
 		if event is InputEventMouseButton:
 			if event.button_index == 1:
-				if event.pressed && !isDragged:
-					isDragged = true
+				if event.pressed && !isSelected:
+					isSelected = true
 					parent.move_child(self, parent.get_child_count() -1)
-				if !event.pressed && isDragged:
-					isDragged = false
-		elif event is InputEventMouseMotion && isDragged:
+				if !event.pressed && isSelected:
+					isSelected = false
+		elif event is InputEventMouseMotion && isSelected:
 			rect_position += event.relative
 			emit_signal("UnitChanged", self, rect_position, rect_size)
 

@@ -265,13 +265,22 @@ func AddToRight(_id:int, _name:String)->void:
 
 func UnitDragged(unit:GraphUnit, _pos:Vector2)->void:
 	if unit == null:
+		var foundEndpoint:bool = false
 		# iterate through Units to check if released on a node for a new Connection
 		for _unit in unitList:
-			if _unit.get_global_rect().has_point(pos_mouse):
+			if _unit.get_global_rect().has_point(pos_mouse - Vector2(0, vScroll.value)) && _unit != draggedUnit:
 				if _unit.outputs.front() != null:
 					OutputPressed(_unit, 0)
+					foundEndpoint = true
 				elif _unit.inputs.front() != null:
 					InputPressed(_unit, 0)
+					foundEndpoint = true
+		
+		if foundEndpoint == false: # if nothing found
+			# cancel pressed Connector
+			#if draggedUnit != null: # checks whether tapped or not
+			inputSelected.clear()
+			outputSelected.clear()
 		
 		draggedUnit = null
 		pos_mouse = Vector2.ZERO
