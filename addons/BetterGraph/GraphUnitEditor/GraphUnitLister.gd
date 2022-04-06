@@ -21,6 +21,13 @@ var pos_mouse:Vector2 = Vector2.ZERO
 var leftList:Array = []
 var rightList:Array = []
 
+func _ADD_DEMO_DATA()->void:
+	var lefts:Array = [{"ID":4, "Name":"leftovich adjinka"}, {"ID":42, "Name":"leftovska dwanchka"}, {"ID":420, "Name":"leftovovich trijuha"}]
+	var rights:Array = [{"ID":4, "Name":"rightig adjinka"}, {"ID":42, "Name":"reichtig dwanchka"}, {"ID":420, "Name":"reihtig trijuha"}]
+	SetLeftRightLists(lefts, rights)
+	
+	AddToLeft(2, "RealValue")
+	AddToRight(5, "BestValue")
 
 func _ready()->void:
 # warning-ignore:return_value_discarded
@@ -31,11 +38,7 @@ func _ready()->void:
 	board.rect_size = rect_size - scrollMargin
 	UpdateScrollBars()
 	
-	AddToLeft(2, "RealValue")
-	AddToLeft(3, "ARealValue")
-	AddToRight(5, "BestValue")
-	AddToRight(88, "ZeBestValue")
-	AddToRight(28, "ZeBestValuez")
+	_ADD_DEMO_DATA()
 
 func _gui_input(event:InputEvent)->void:
 	if event is InputEventMouseButton:
@@ -200,8 +203,21 @@ func _on_StartFirst_pressed()->void:
 func GetPosXLeft()->float:
 	return (connectionDraw.rect_size.x * 0.1)
 
+func NewPosLeft()->Vector2:
+	var x:float = GetPosXLeft()
+	var _last = leftList.back()
+	var y:float = 0
+	var margin:float = 20
+	
+	if _last != null:
+		y = (_last.rect_position.y + _last.rect_size.y) + margin - vScroll.value
+	else: #first
+		y = margin
+	
+	return Vector2(x, y)
+	
 func AddToLeft(_id:int, _name:String)->void:
-	if _id < 0 || !_name.is_valid_identifier():
+	if _id < 0 || _name.empty():
 		print("ERR - ID or Name of GraphUnitNaked is not valid!")
 		return
 	# iterate through _list and add as Units
@@ -211,16 +227,29 @@ func AddToLeft(_id:int, _name:String)->void:
 	_unit.unitName = _name
 	_unit.outputCount = 1
 	
-	var pos_x = GetPosXLeft()
-	
-	self.AddUnit(_unit, Vector2(pos_x,100*(leftList.size()+1)))
+	AddUnit(_unit, NewPosLeft())
 	leftList.append(_unit)
+	
+	UnitChanged(_unit, _unit.rect_position, _unit.rect_size)
 
 func GetPosXRight()->float:
 	return (connectionDraw.rect_size.x * 0.55)
 
+func NewPosRight()->Vector2:
+	var x:float = GetPosXRight()
+	var _last = rightList.back()
+	var y:float = 0
+	var margin:float = 20
+	
+	if _last != null:
+		y = (_last.rect_position.y + _last.rect_size.y) + margin - vScroll.value
+	else: #first
+		y = margin
+	
+	return Vector2(x, y)
+
 func AddToRight(_id:int, _name:String)->void:
-	if _id < 0 || !_name.is_valid_identifier():
+	if _id < 0 || _name.empty():
 		print("ERR - ID or Name of GraphUnitNaked is not valid!")
 		return
 	# iterate through _list and add as Units
@@ -230,10 +259,9 @@ func AddToRight(_id:int, _name:String)->void:
 	_unit.unitName = _name
 	_unit.inputCount = 1
 	
-	var pos_x = GetPosXRight()
-	
-	AddUnit(_unit, Vector2(pos_x,100*(rightList.size()+1)))
+	AddUnit(_unit, NewPosRight())
 	rightList.append(_unit)
+	UnitChanged(_unit, _unit.rect_position, _unit.rect_size)
 
 func UnitDragged(unit:GraphUnit, _pos:Vector2)->void:
 	if unit == null:
@@ -264,3 +292,11 @@ func _on_GraphUnitLister_resized():
 		print(connectionDraw.rect_size.x)
 	
 	
+func SetLeftRightLists(lefts:Array, rights:Array)->void:
+	for unit in lefts:
+		AddToLeft(unit.ID, unit.Name)
+	
+	for unit in rights:
+		AddToRight(unit.ID, unit.Name)
+	
+

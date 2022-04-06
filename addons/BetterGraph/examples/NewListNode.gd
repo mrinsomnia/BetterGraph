@@ -8,5 +8,5 @@ onready var graphUnitEditor:Node = get_node(graphUnitEditorPath)
 
 func _pressed():
 	if unitScene != null:
-		var inst:GraphUnit = unitScene.instance()
-		graphUnitEditor.AddUnit(inst, position)
+		graphUnitEditor.SetLeftRightLists([{"ID":44, "Name":"add! to left"}],[{"ID":4, "Name":"put! it right"}])
+

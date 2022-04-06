@@ -13,7 +13,7 @@ func _ready()->void:
 #	UnitName.text = unitName
 	
 func SetName(value:String)->void:
-	if value.is_valid_identifier():
+	if !value.empty():
 		unitName = value
 
 func SetID(value:int)->void:
