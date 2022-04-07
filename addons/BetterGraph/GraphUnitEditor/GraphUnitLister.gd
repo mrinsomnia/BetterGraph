@@ -298,7 +298,7 @@ func _on_GraphUnitLister_resized():
 	for _unit in rightList:
 		var pos_x = GetPosXRight()
 		_unit.rect_position.x = pos_x
-		print(connectionDraw.rect_size.x)
+#		print(connectionDraw.rect_size.x)
 
 
 func SetLeftRightLists(lefts:Array, rights:Array)->void:
