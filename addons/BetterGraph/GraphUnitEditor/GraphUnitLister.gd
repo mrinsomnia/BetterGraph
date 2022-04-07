@@ -268,7 +268,7 @@ func UnitDragged(unit:GraphUnit, _pos:Vector2)->void:
 		var foundEndpoint:bool = false
 		# iterate through Units to check if released on a node for a new Connection
 		for _unit in unitList:
-			if _unit.get_global_rect().has_point(pos_mouse - Vector2(0, vScroll.value)) && _unit != draggedUnit:
+			if _unit.get_global_rect().has_point(rect_global_position + pos_mouse - Vector2(0, vScroll.value)) && _unit != draggedUnit:
 				if _unit.outputs.front() != null:
 					OutputPressed(_unit, 0)
 					foundEndpoint = true
