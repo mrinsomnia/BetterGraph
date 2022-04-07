@@ -51,3 +51,6 @@ func _gui_input(event:InputEvent)->void:
 		wasDragged = true
 		emit_signal("UnitDragged", self, rect_position + event.position)
 		TriggerConnection()
+
+	
+	

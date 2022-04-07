@@ -299,8 +299,8 @@ func _on_GraphUnitLister_resized():
 		var pos_x = GetPosXRight()
 		_unit.rect_position.x = pos_x
 		print(connectionDraw.rect_size.x)
-	
-	
+
+
 func SetLeftRightLists(lefts:Array, rights:Array)->void:
 	for unit in lefts:
 		AddToLeft(unit.ID, unit.Name)
@@ -308,4 +308,17 @@ func SetLeftRightLists(lefts:Array, rights:Array)->void:
 	for unit in rights:
 		AddToRight(unit.ID, unit.Name)
 	
+
+func GetConnectedUnits()->Array:
+	var result:Array = []
+	for conn in connections:
+		for conn_in in connections[conn]:
+			# conn is left_unit and conn_in is right_unit
+			# GraphUnitNaked has ID & Name given
+			pass
+	
+	return result
+
+
+
 
