@@ -4,7 +4,7 @@ class_name GraphUnitNaked
 signal UnitDragged
 
 export var unitName:String = "default" setget SetName
-export var unitID:int = -1 setget SetID
+export var unitID:String = "-1" setget SetID
 
 var wasDragged:bool = false
 
@@ -18,8 +18,8 @@ func SetName(value:String)->void:
 	if !value.empty():
 		unitName = value
 
-func SetID(value:int)->void:
-	if value >= 0:
+func SetID(value:String)->void:
+	if !value.empty():
 		unitID = value
 
 # Adding place where Unit exists, probs should be done in ready

@@ -2,6 +2,7 @@ extends Control
 
 export var connectionDrawPath:NodePath
 export var unitScene:PackedScene = preload("res://addons/BetterGraph/GraphUnit/GraphUnitNaked.tscn")
+export var unitSoundScene:PackedScene = preload("res://addons/BetterGraph/GraphUnit/GraphUnitSound.tscn")
 
 onready var hScroll: = $HScrollBar
 onready var vScroll: = $VScrollBar
@@ -22,12 +23,12 @@ var leftList:Array = []
 var rightList:Array = []
 
 func _ADD_DEMO_DATA()->void:
-	var lefts:Array = [{"ID":4, "Name":"leftovich adjinka"}, {"ID":42, "Name":"leftovska dwanchka"}, {"ID":420, "Name":"leftovovich trijuha"}]
-	var rights:Array = [{"ID":4, "Name":"rightig adjinka"}, {"ID":42, "Name":"reichtig dwanchka"}, {"ID":420, "Name":"reihtig trijuha"}]
+	var lefts:Array = [{"type":"NAME", "ID":"leftovich adjinka", "content":null}, {"type":"NAME", "ID":"leftovska dwanchka", "content":null}, {"type":"NAME", "ID":"leftovovich trijuha", "content":null}]
+	var rights:Array = [{"type":"NAME", "ID":"rightig adjinka", "content":null}, {"type":"NAME", "ID":"reichtig dwanchka", "content":null}, {"type":"NAME", "ID":"reihtig trijuha", "content":null}]
 	SetLeftRightLists(lefts, rights)
 	
-	AddToLeft(2, "RealValue")
-	AddToRight(5, "BestValue")
+	AddToLeft("NAME", "RealValue")
+	AddToRight("NAME", "BestValue")
 
 func _ready()->void:
 # warning-ignore:return_value_discarded
@@ -216,17 +217,24 @@ func NewPosLeft()->Vector2:
 	
 	return Vector2(x, y)
 	
-func AddToLeft(_id:int, _name:String)->void:
-	if _id < 0 || _name.empty():
+func AddToLeft(type:String, _id:String, _content = null)->void:
+	if _id.empty():
 		print("ERR - ID or Name of GraphUnitNaked is not valid!")
 		return
 	# iterate through _list and add as Units
 	# element = ID & Name = GraphUnitNaked.tscn
-	var _unit = unitScene.instance()
-	_unit.unitID = _id
-	_unit.unitName = _name
-	_unit.outputCount = 1
+	var _unit
+	match type:
+		"SOUND":
+			_unit = unitSoundScene.instance()
+			_unit.unitID = _id
+			_unit.SetContent(_content)
+		_:
+			_unit = unitScene.instance()
+			_unit.unitID = _id
+			_unit.unitName = _id
 	
+	_unit.outputCount = 1
 	AddUnit(_unit, NewPosLeft())
 	leftList.append(_unit)
 	
@@ -248,17 +256,24 @@ func NewPosRight()->Vector2:
 	
 	return Vector2(x, y)
 
-func AddToRight(_id:int, _name:String)->void:
-	if _id < 0 || _name.empty():
+func AddToRight(type:String, _id:String, _content = null)->void:
+	if _id.empty():
 		print("ERR - ID or Name of GraphUnitNaked is not valid!")
 		return
 	# iterate through _list and add as Units
 	# element = ID & Name = GraphUnitNaked.tscn
-	var _unit = unitScene.instance()
-	_unit.unitID = _id
-	_unit.unitName = _name
-	_unit.inputCount = 1
+	var _unit
+	match type:
+		"NAME":
+			_unit = unitScene.instance()
+			_unit.unitID = _id
+			_unit.unitName = _id
+		"SOUND":
+			_unit = unitSoundScene.instance()
+			_unit.unitID = _id
+			_unit.SetContent(_content)
 	
+	_unit.inputCount = 1
 	AddUnit(_unit, NewPosRight())
 	rightList.append(_unit)
 	UnitChanged(_unit, _unit.rect_position, _unit.rect_size)
@@ -303,10 +318,10 @@ func _on_GraphUnitLister_resized():
 
 func SetLeftRightLists(lefts:Array, rights:Array)->void:
 	for unit in lefts:
-		AddToLeft(unit.ID, unit.Name)
+		AddToLeft(unit.type, unit.ID, unit.content)
 	
 	for unit in rights:
-		AddToRight(unit.ID, unit.Name)
+		AddToRight(unit.type, unit.ID, unit.content)
 	
 
 func GetConnectedUnits()->Array:

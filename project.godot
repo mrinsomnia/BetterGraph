@@ -33,13 +33,19 @@ _global_script_classes=[ {
 "class": "GraphUnitNaked",
 "language": "GDScript",
 "path": "res://addons/BetterGraph/GraphUnit/GraphUnitNaked.gd"
+}, {
+"base": "",
+"class": "GraphUnitSound",
+"language": "GDScript",
+"path": "res://addons/BetterGraph/GraphUnit/GraphUnitSound.gd"
 } ]
 _global_script_class_icons={
 "Connector": "",
 "GraphFlowUnit": "",
 "GraphSceneUnit": "",
 "GraphUnit": "",
-"GraphUnitNaked": ""
+"GraphUnitNaked": "",
+"GraphUnitSound": ""
 }
 
 [application]
