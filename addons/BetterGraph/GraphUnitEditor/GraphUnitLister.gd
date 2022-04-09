@@ -156,11 +156,11 @@ func InputPressed(unit:GraphUnit, input:int)->void:
 		if EstablishConnection(outputSelected.unit , unit, outputSelected.output , input):
 			outputSelected.clear()
 
-func OutputPressed(unit:GraphUnit, output:int)->void:
+func OutputPressed(unit:GraphUnit, output:int, clearOthers:bool = false)->void:
 	if inputSelected.empty():
 		outputSelected["unit"] = unit
 		outputSelected["output"] = output
-	else:
+	else: # if input is already selected
 		if inputSelected.unit == unit:
 			return
 		if EstablishConnection(unit , inputSelected.unit, output ,inputSelected.input):
@@ -174,6 +174,7 @@ func EstablishConnection(unitOut:GraphUnit, unitIn:GraphUnit, output:int, input:
 		input = input
 	}
 	if !unitOut.ConnectionValidation(data):
+		
 		return false
 	unitOut.ConnectedOut(data)
 	if !connections.has(unitOut):
@@ -184,10 +185,18 @@ func EstablishConnection(unitOut:GraphUnit, unitIn:GraphUnit, output:int, input:
 
 func Disconnect(data:Dictionary)->void:
 	for i in connections[data.unitOut].size():
-		if connections[data.unitOut][i] == data:
+		if connections[data.unitOut][i] == data || connections[data.unitOut][i].hash() == data.hash():
 			connections[data.unitOut].remove(i)
 			break
+#	if data.unitOut && data.unitOut.ConnectionTo(data.unitIn) != data.unitOut.EMPTY_DATA:
+#		data.unitOut.OutputDisconnected(data.output)
+#	if data.unitIn && data.unitIn.ConnectionTo(data.unitOut) != data.unitIn.EMPTY_DATA:
+#		data.unitIn.InputDisconnected(data.input)
 	connectionDraw.update()
+
+func ClearSelectedConnections()->void:
+	outputSelected.clear()
+	inputSelected.clear()
 
 func ConnectionsRemoved(list:Array)->void:
 	for data in list:
@@ -284,18 +293,35 @@ func UnitDragged(unit:GraphUnit, _pos:Vector2)->void:
 		# iterate through Units to check if released on a node for a new Connection
 		for _unit in unitList:
 			if _unit.get_global_rect().has_point(rect_global_position + pos_mouse - Vector2(0, vScroll.value)) && _unit != draggedUnit:
+				var connData = _unit.ConnectionTo(draggedUnit)
 				if _unit.outputs.front() != null:
-					OutputPressed(_unit, 0)
-					foundEndpoint = true
+					# check if this connection already exists, if so, remove it
+					if connData != _unit.EMPTY_DATA:
+						ClearSelectedConnections()
+						Disconnect(_unit.ConnectionTo(draggedUnit, true))
+#						connectionDraw.update()
+					else:
+						_unit.ClearConnected()
+						OutputPressed(_unit, 0)
+						foundEndpoint = true
 				elif _unit.inputs.front() != null:
-					InputPressed(_unit, 0)
-					foundEndpoint = true
+					# check if this connection already exists, if so, remove it
+					if connData != _unit.EMPTY_DATA:
+						ClearSelectedConnections()
+						Disconnect(_unit.ConnectionTo(draggedUnit, true))
+#						Disconnect(connData)
+#						connectionDraw.update()
+					else:
+						if !outputSelected.empty():
+							# get currently "selected output" output.unit.ClearConnected()
+							outputSelected.unit.ClearConnected()
+						InputPressed(_unit, 0)
+						foundEndpoint = true
 		
 		if foundEndpoint == false: # if nothing found
 			# cancel pressed Connector
 			#if draggedUnit != null: # checks whether tapped or not
-			inputSelected.clear()
-			outputSelected.clear()
+			ClearSelectedConnections()
 		
 		draggedUnit = null
 		pos_mouse = Vector2.ZERO

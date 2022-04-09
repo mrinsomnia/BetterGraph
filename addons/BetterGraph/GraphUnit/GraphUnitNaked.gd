@@ -27,6 +27,7 @@ func SetBoard(_board)->void:
 	UnitBoardEditor = _board
 	UnitName.text = unitName
 
+
 # has to be single, or uses first
 func TriggerConnection()->void:
 	if outputs.size() > 0:
