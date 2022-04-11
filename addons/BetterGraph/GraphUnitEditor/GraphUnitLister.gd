@@ -174,7 +174,6 @@ func EstablishConnection(unitOut:GraphUnit, unitIn:GraphUnit, output:int, input:
 		input = input
 	}
 	if !unitOut.ConnectionValidation(data):
-		
 		return false
 	unitOut.ConnectedOut(data)
 	if !connections.has(unitOut):

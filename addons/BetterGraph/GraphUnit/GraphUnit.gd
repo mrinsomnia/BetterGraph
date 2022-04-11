@@ -147,7 +147,7 @@ func OutputDisconnected(index:int)->void:
 			emit_signal("Disconnect", data)
 			break
 
-
+# removes all connections on "index" input, also on connected unit the connection to here
 func InputRemoved(index:int)->void:
 	if !connectionsIn.has(index):
 		return
@@ -162,6 +162,7 @@ func InputRemoved(index:int)->void:
 				break
 	emit_signal("ConnectionsRemoved", list)
 
+# removes all connections on "index" out, also on connected unit the connection to here
 func OutputRemoved(index:int)->void:
 	if !connectionsOut.has(index):
 		return
