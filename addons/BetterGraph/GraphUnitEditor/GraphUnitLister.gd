@@ -39,7 +39,7 @@ func _ready()->void:
 	board.rect_size = rect_size - scrollMargin
 	UpdateScrollBars()
 	
-	_ADD_DEMO_DATA()
+#	_ADD_DEMO_DATA()
 
 func _gui_input(event:InputEvent)->void:
 	if event is InputEventMouseButton:
@@ -187,10 +187,6 @@ func Disconnect(data:Dictionary)->void:
 		if connections[data.unitOut][i] == data || connections[data.unitOut][i].hash() == data.hash():
 			connections[data.unitOut].remove(i)
 			break
-#	if data.unitOut && data.unitOut.ConnectionTo(data.unitIn) != data.unitOut.EMPTY_DATA:
-#		data.unitOut.OutputDisconnected(data.output)
-#	if data.unitIn && data.unitIn.ConnectionTo(data.unitOut) != data.unitIn.EMPTY_DATA:
-#		data.unitIn.InputDisconnected(data.input)
 	connectionDraw.update()
 
 func ClearSelectedConnections()->void:
@@ -350,6 +346,33 @@ func GetConnectedUnits()->Array:
 	
 	return result
 
+func RemoveAllUnits()->void:
+	for unit in leftList:
+		unit.RemoveSelf()
+	leftList.clear()
+	
+	for unit in rightList:
+		unit.RemoveSelf()
+	rightList.clear()
+
+func GetClonedConnections()->Array:
+	var result = []
+	for conn in connections:
+		for _data in connections[conn]:
+			result.append(_data.duplicate(true))
+	
+	return result
+
+func ResetConnections(dataList:Array)->void:
+	# clear all current connections
+	for unit in leftList: # going over only left should remove also all right connections
+		unit.ClearConnected()
+	
+	# apply connections from dataList
+	for data in dataList:
+		EstablishConnection(data.unitOut, data.unitIn, data.output, data.input)
+
+	
 
 
 
