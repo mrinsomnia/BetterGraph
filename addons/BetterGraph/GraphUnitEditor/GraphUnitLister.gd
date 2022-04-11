@@ -207,7 +207,8 @@ func ConnectionsRemoved(list:Array)->void:
 	connectionDraw.update()
 
 func _on_StartFirst_pressed()->void:
-	unitList.front().BellyStart(null)
+	if unitList.size() > 0:
+		unitList.front().BellyStart(null)
 
 
 func GetPosXLeft()->float:
@@ -280,6 +281,7 @@ func AddToRight(type:String, _id:String, _content = null)->void:
 		"SOUND":
 			_unit = unitSoundScene.instance()
 			_unit.unitID = _id
+			_unit.unitName = _id
 			_unit.SetContent(_content)
 	
 	_unit.inputCount = 1
@@ -289,7 +291,6 @@ func AddToRight(type:String, _id:String, _content = null)->void:
 
 func UnitDragged(unit:GraphUnit, _pos:Vector2)->void:
 	if unit == null:
-		var foundEndpoint:bool = false
 		# iterate through Units to check if released on a node for a new Connection
 		for _unit in unitList:
 			if _unit.get_global_rect().has_point(rect_global_position + pos_mouse - Vector2(0, vScroll.value)) && _unit != draggedUnit:
@@ -297,31 +298,21 @@ func UnitDragged(unit:GraphUnit, _pos:Vector2)->void:
 				if _unit.outputs.front() != null:
 					# check if this connection already exists, if so, remove it
 					if connData != _unit.EMPTY_DATA:
-						ClearSelectedConnections()
 						Disconnect(_unit.ConnectionTo(draggedUnit, true))
-#						connectionDraw.update()
 					else:
 						_unit.ClearConnected()
 						OutputPressed(_unit, 0)
-						foundEndpoint = true
 				elif _unit.inputs.front() != null:
 					# check if this connection already exists, if so, remove it
 					if connData != _unit.EMPTY_DATA:
-						ClearSelectedConnections()
 						Disconnect(_unit.ConnectionTo(draggedUnit, true))
-#						Disconnect(connData)
-#						connectionDraw.update()
 					else:
 						if !outputSelected.empty():
 							# get currently "selected output" output.unit.ClearConnected()
 							outputSelected.unit.ClearConnected()
 						InputPressed(_unit, 0)
-						foundEndpoint = true
 		
-		if foundEndpoint == false: # if nothing found
-			# cancel pressed Connector
-			#if draggedUnit != null: # checks whether tapped or not
-			ClearSelectedConnections()
+		ClearSelectedConnections()
 		
 		draggedUnit = null
 		pos_mouse = Vector2.ZERO
