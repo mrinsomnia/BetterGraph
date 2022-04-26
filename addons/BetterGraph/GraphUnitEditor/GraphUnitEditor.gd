@@ -18,7 +18,8 @@ var outputSelected:Dictionary
 var connections:Dictionary
 var scrollMargin:Vector2
 
-
+# useful for extended classes
+var draggedUnit:GraphUnit = null
 
 func _ready()->void:
 # warning-ignore:return_value_discarded

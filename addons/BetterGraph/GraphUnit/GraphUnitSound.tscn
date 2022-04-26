@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://addons/BetterGraph/GraphUnit/GraphUnitNaked.tscn" type="PackedScene" id=1]
+[ext_resource path="res://addons/BetterGraph/GraphUnit/GraphUnitSound.gd" type="Script" id=2]
+
+[node name="GraphUnitSound" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+Path_AudioPlayer = NodePath("AudioStreamPlayer")
+
+[node name="HBoxContainer" parent="VBoxContainer" index="1"]
+margin_bottom = 38.0
+
+[node name="InputParent" parent="VBoxContainer/HBoxContainer" index="0"]
+margin_bottom = 20.0
+
+[node name="UnitBelly" parent="VBoxContainer/HBoxContainer" index="1"]
+margin_left = 28.0
+margin_right = 71.0
+margin_bottom = 20.0
+
+[node name="PlayBelly" type="Button" parent="VBoxContainer/HBoxContainer/UnitBelly" index="0"]
+margin_right = 43.0
+margin_bottom = 20.0
+text = "PLAY"
+
+[node name="OutputParent" parent="VBoxContainer/HBoxContainer" index="2"]
+margin_bottom = 20.0
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." index="2"]
+
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/UnitBelly/PlayBelly" to="." method="_on_PlayBelly_pressed"]

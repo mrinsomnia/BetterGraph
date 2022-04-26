@@ -28,12 +28,24 @@ _global_script_classes=[ {
 "class": "GraphUnit",
 "language": "GDScript",
 "path": "res://addons/BetterGraph/GraphUnit/GraphUnit.gd"
+}, {
+"base": "",
+"class": "GraphUnitNaked",
+"language": "GDScript",
+"path": "res://addons/BetterGraph/GraphUnit/GraphUnitNaked.gd"
+}, {
+"base": "",
+"class": "GraphUnitSound",
+"language": "GDScript",
+"path": "res://addons/BetterGraph/GraphUnit/GraphUnitSound.gd"
 } ]
 _global_script_class_icons={
 "Connector": "",
 "GraphFlowUnit": "",
 "GraphSceneUnit": "",
-"GraphUnit": ""
+"GraphUnit": "",
+"GraphUnitNaked": "",
+"GraphUnitSound": ""
 }
 
 [application]
@@ -48,6 +60,10 @@ window/size/width=1280
 window/size/height=720
 window/size/test_width=1280
 window/size/test_height=720
+
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/EditorPlugin/plugin.cfg" )
 
 [rendering]
 
