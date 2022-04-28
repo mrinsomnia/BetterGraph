@@ -1,14 +1,14 @@
 extends Control
 
 export var connectionDrawPath:NodePath
+export var boardPath:NodePath
 
 onready var hScroll: = $HScrollBar
 onready var vScroll: = $VScrollBar
-onready var board: = $Board
+onready var board: = get_node(boardPath)
 onready var connectionDraw: = get_node(connectionDrawPath)
 onready var InfoCurrent: = $Board/Info/VBoxContainer/HBoxContainer/CurrentValue
 onready var InfoHaltFirst: = $Board/Info/VBoxContainer/HBoxContainer2/HaltFirst
-
 
 var unitDictionary:Dictionary
 var unitList:Array
@@ -17,6 +17,9 @@ var inputSelected:Dictionary
 var outputSelected:Dictionary
 var connections:Dictionary
 var scrollMargin:Vector2
+var boardArea:Rect2
+var unitSelected:GraphUnit = null
+var scrollMove: = Vector2.ZERO
 
 
 
@@ -26,7 +29,7 @@ func _ready()->void:
 # warning-ignore:return_value_discarded
 	vScroll.connect("scrolling", self, "VScrolling")
 	scrollMargin = Vector2(vScroll.rect_size.x, hScroll.rect_size.y)
-	board.rect_size = rect_size - scrollMargin
+	boardArea.size = rect_size - scrollMargin
 	UpdateScrollBars()
 
 func _gui_input(event:InputEvent)->void:
@@ -42,27 +45,13 @@ func _gui_input(event:InputEvent)->void:
 		HScrolling()
 		VScrolling()
 
-func UpdateScrollBars()->void:
-	hScroll.max_value = board.rect_size.x + scrollMargin.x
-	hScroll.value = -board.rect_position.x
-	hScroll.page = rect_size.x
-	vScroll.max_value = board.rect_size.y + scrollMargin.y
-	vScroll.value = -board.rect_position.y
-	vScroll.page = rect_size.y
-
-func HScrolling()->void:
-	board.rect_position.x = -hScroll.value
-
-func VScrolling()->void:
-	board.rect_position.y = -vScroll.value
-
 func AddUnit(unit:GraphUnit, pos:Vector2 = Vector2.ZERO)->void:
 	board.add_child(unit)
 	unit.SetBoard(self)
-	unit.rect_position = pos + Vector2(hScroll.value, vScroll.value)
+	unit.rect_position = pos - board.rect_position#+ Vector2(hScroll.value, vScroll.value)
 	unitDictionary[unit.name] = unit
 	unitList.append(unit)
-	
+	unit.connect("UnitSelected", self, "UnitSelected")
 # warning-ignore:return_value_discarded
 	unit.connect("tree_exited", self, "RemoveUnit", [unit])
 # warning-ignore:return_value_discarded
@@ -78,7 +67,6 @@ func AddUnit(unit:GraphUnit, pos:Vector2 = Vector2.ZERO)->void:
 # warning-ignore:return_value_discarded
 	unit.connect("DrawConnections", connectionDraw, "update")
 	unit.Bless()
-	
 
 func RemoveUnit(unit:GraphUnit)->void:
 # warning-ignore:return_value_discarded
@@ -88,48 +76,60 @@ func RemoveUnit(unit:GraphUnit)->void:
 		unitList.append(unitDictionary[k])
 	#TO-DO: check if unit has active connections
 
-func MoveUnits(offset:Vector2)->void:
-	for unit in unitList:
-		unit.rect_position += offset
-
-func UnitChanged(unit:GraphUnit, pos:Vector2, size:Vector2)->void:
-	### OPTIMIZE SHRINK & EXTEND
-	### NOW ONLY EXTENDS
-	if pos.x + size.x > board.rect_size.x:
-		board.rect_size.x = pos.x + size.x
-	
-	if pos.y + size.y > board.rect_size.y:
-		board.rect_size.y = pos.y + size.y
-	
-	var offset: = Vector2.ZERO
-	var move: = false
-	if pos.x < 0.0:
-		board.rect_size.x += -pos.x
-		offset.x = -pos.x
-		move = true
-	
-	if pos.y < 0.0:
-		board.rect_size.y += -pos.y
-		offset.y = -pos.y
-		move = true
-	
-	if move:
-		MoveUnits(offset)
-	
-	if board.rect_size > rect_size - scrollMargin:
-		var limits = rect_size - scrollMargin
-		for unit in unitList:
-			var unitLimit:Vector2 = unit.rect_position + unit.rect_size
-			if unitLimit.x > limits.x:
-				limits.x = unitLimit.x
-			if unitLimit.y > limits.y:
-				limits.y = unitLimit.y
-		board.rect_size = limits
-	
+func UpdateEditor()->void:
 	UpdateScrollBars()
-	connectionDraw.update()
 	HScrolling()
 	VScrolling()
+	connectionDraw.update()
+
+func UpdateScrollBars()->void:
+	hScroll.max_value = boardArea.size.x
+	vScroll.max_value = boardArea.size.y
+	hScroll.page = rect_size.x - scrollMargin.x
+	vScroll.page = rect_size.y - scrollMargin.y
+	hScroll.value += scrollMove.x
+	vScroll.value += scrollMove.y
+	scrollMove = Vector2.ZERO
+	connectionDraw.rect_size = boardArea.size
+
+func HScrolling()->void:
+	board.rect_position.x = (-boardArea.position.x - hScroll.value)
+	connectionDraw.rect_position.x = -hScroll.value
+
+func VScrolling()->void:
+	board.rect_position.y = (-boardArea.position.y - vScroll.value )
+	connectionDraw.rect_position.y = -vScroll.value
+
+func UnitSelected(newUnit:GraphUnit)->void:
+	if (unitSelected != null):
+		unitSelected.state = GraphUnit.NORMAL
+	unitSelected = newUnit
+	unitSelected.state = GraphUnit.SELECTED
+
+func UnitChanged(unit:GraphUnit)->void:
+	### OPTIMIZE SHRINK & EXTEND
+	### NOW ONLY EXTENDS
+	var pos: = unit.rect_position
+	var pos2: = (unit.rect_size) + unit.rect_position
+	var boardPos2: = boardArea.size + boardArea.position
+	
+	if pos.x < boardArea.position.x:
+		boardArea.size.x += boardArea.position.x - pos.x
+		boardArea.position.x = pos.x
+	
+	if pos.y < boardArea.position.y:
+		boardArea.size.y += boardArea.position.y - pos.y
+		boardArea.position.y = pos.y
+	
+	if pos2.x > boardPos2.x:
+		scrollMove.x = pos2.x - boardPos2.x
+		boardArea.size.x += scrollMove.x
+	
+	if pos2.y > boardPos2.y:
+		scrollMove.y = pos2.y - boardPos2.y
+		boardArea.size.y += scrollMove.y
+	
+	UpdateEditor()
 
 func InputPressed(unit:GraphUnit, input:int)->void:
 	if outputSelected.empty():
@@ -182,8 +182,8 @@ func ConnectionsRemoved(list:Array)->void:
 				break
 	connectionDraw.update()
 
-func _on_StartFirst_pressed()->void:
-	unitList.front().BellyStart(null)
-
 func UpdateInfoCurrent(_nodeName)->void:
-	InfoCurrent.text = _nodeName
+	if InfoCurrent != null:
+		InfoCurrent.text = _nodeName
+
+

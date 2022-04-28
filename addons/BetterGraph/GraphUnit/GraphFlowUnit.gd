@@ -39,7 +39,7 @@ func InjectScene(_instance)->void:
 	containedScene = _instance
 
 func BellyStart(_mirror)->void:
-	if (_mirror != null && UnitBoardEditor.unitList.front() == self && UnitBoardEditor.InfoHaltFirst.pressed):
+	if (_mirror != null && UnitBoardEditor.unitList.front() == self && UnitBoardEditor.InfoHaltFirst != null && UnitBoardEditor.InfoHaltFirst.pressed):
 		return
 	ChangeStyle(UnitStyles.active)
 	UnitBoardEditor.UpdateInfoCurrent(UnitName.text)
@@ -63,14 +63,7 @@ func HoldScene()->void:
 	InjectScene(inst)
 
 func ChangeStyle(_style)->void:
-	match _style:
-		UnitStyles.default:
-			if UnitBoardEditor.unitList.front() == self:
-				UnitStylePanel.set("custom_styles/panel", UnitStyleFirst)
-			else:
-				UnitStylePanel.set("custom_styles/panel", UnitStyleDefault)
-		UnitStyles.active:
-			UnitStylePanel.set("custom_styles/panel", UnitStyleActive)
+	pass
 
 func Bless()->void:
 	ChangeStyle(UnitStyles.default)

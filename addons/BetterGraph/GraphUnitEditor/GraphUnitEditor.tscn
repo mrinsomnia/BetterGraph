@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://addons/BetterGraph/GraphUnitEditor/TopLayer.gd" type="Script" id=1]
+[ext_resource path="res://addons/BetterGraph/GraphUnitEditor/ConnectionDraw.gd" type="Script" id=1]
 [ext_resource path="res://addons/BetterGraph/GraphUnitEditor/GraphUnitEditor.gd" type="Script" id=2]
 
 [sub_resource type="StyleBoxFlat" id=1]
@@ -14,18 +14,19 @@ script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-connectionDrawPath = NodePath("Board/ConnectionDraw")
+connectionDrawPath = NodePath("Panel/ConnectionDraw")
+boardPath = NodePath("Panel/Board")
 
-[node name="Board" type="Panel" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="Panel" type="Panel" parent="."]
+margin_right = 1280.0
+margin_bottom = 720.0
 mouse_filter = 2
 custom_styles/panel = SubResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ConnectionDraw" type="Control" parent="Board"]
+[node name="ConnectionDraw" type="Control" parent="Panel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -34,50 +35,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Info" type="PanelContainer" parent="Board"]
-margin_right = 109.0
-margin_bottom = 31.0
+[node name="Board" type="Control" parent="Panel"]
+margin_right = 40.0
+margin_bottom = 40.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Board/Info"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 120.0
-margin_bottom = 73.0
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Board/Info/VBoxContainer"]
-margin_right = 113.0
-margin_bottom = 14.0
-
-[node name="Current" type="Label" parent="Board/Info/VBoxContainer/HBoxContainer"]
-margin_right = 24.0
-margin_bottom = 14.0
-text = "cur:"
-
-[node name="CurrentValue" type="Label" parent="Board/Info/VBoxContainer/HBoxContainer"]
-margin_left = 28.0
-margin_right = 113.0
-margin_bottom = 14.0
-text = "Node #num#"
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="Board/Info/VBoxContainer"]
-margin_top = 18.0
-margin_right = 113.0
-margin_bottom = 42.0
-
-[node name="HaltFirst" type="CheckBox" parent="Board/Info/VBoxContainer/HBoxContainer2"]
-margin_right = 101.0
-margin_bottom = 24.0
-pressed = true
-text = "halt on first"
-
-[node name="StartFirst" type="Button" parent="Board/Info/VBoxContainer"]
-margin_top = 46.0
-margin_right = 113.0
-margin_bottom = 66.0
-text = "Start first"
 
 [node name="VScrollBar" type="VScrollBar" parent="."]
 anchor_left = 1.0
@@ -98,5 +61,3 @@ margin_right = -12.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[connection signal="pressed" from="Board/Info/VBoxContainer/StartFirst" to="." method="_on_StartFirst_pressed"]
