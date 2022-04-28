@@ -8,13 +8,6 @@ signal Disconnect
 signal ConnectionsRemoved
 signal DrawConnections
 
-const EMPTY_DATA:Dictionary = {
-	unitOut = null,
-	output = null,
-	unitIn = null,
-	input = null
-}
-
 
 export var inputCount:int setget SetInputs
 export var outputCount:int setget SetOutputs
@@ -22,7 +15,6 @@ export var inputParentPath:NodePath
 export var outputParentPath:NodePath
 export var connectorScene:PackedScene = preload("res://addons/BetterGraph/UnitConnector/Connector.tscn")
 export var unitBellyPath:NodePath
-export var handleGUIinBase:bool = true
 
 onready var inputParent: = get_node(inputParentPath)
 onready var outputParent: = get_node(outputParentPath)
@@ -33,8 +25,7 @@ onready var unitBelly: = get_node(unitBellyPath)
 onready var UnitStylePanel:Node = $Panel
 
 
-
-var isSelected: = false
+var isDragged: = false
 var inputs:Array = []
 var outputs:Array = []
 var connectionsIn:Dictionary = {}	#data list array by output key
@@ -99,17 +90,16 @@ func _ready()->void:
 	
 
 func _gui_input(event:InputEvent)->void:
-	if handleGUIinBase:
-		if event is InputEventMouseButton:
-			if event.button_index == 1:
-				if event.pressed && !isSelected:
-					isSelected = true
-					parent.move_child(self, parent.get_child_count() -1)
-				if !event.pressed && isSelected:
-					isSelected = false
-		elif event is InputEventMouseMotion && isSelected:
-			rect_position += event.relative
-			emit_signal("UnitChanged", self, rect_position, rect_size)
+	if event is InputEventMouseButton:
+		if event.button_index == 1:
+			if event.pressed && !isDragged:
+				isDragged = true
+				parent.move_child(self, parent.get_child_count() -1)
+			if !event.pressed && isDragged:
+				isDragged = false
+	elif event is InputEventMouseMotion && isDragged:
+		rect_position += event.relative
+		emit_signal("UnitChanged", self, rect_position, rect_size)
 
 
 func InputPressed(_connector:Button, index:int)->void:
@@ -118,36 +108,34 @@ func InputPressed(_connector:Button, index:int)->void:
 func OutputPressed(_connector:Button, index:int)->void:
 	emit_signal("OutputPressed", self, index)
 
+
 func InputDisconnected(index:int)->void:
 	if !connectionsIn.has(index):
 		return
 	if connectionsIn[index].empty():
 		return
-	var data:Dictionary = connectionsIn[index].back()
-	var list:Array = data.unitIn.connectionsIn[data.input]
+	var data:Dictionary = connectionsIn[index].pop_back()
+	var list:Array = data.unitOut.connectionsOut[data.output]
 	for i in list.size():
 		if list[i] == data:
 			data.unitOut.connectionsOut[data.output].remove(i)
-			connectionsIn[index].erase(data)
-			emit_signal("Disconnect", data)
 			break
+	emit_signal("Disconnect", data)
 
 func OutputDisconnected(index:int)->void:
 	if !connectionsOut.has(index):
 		return
 	if connectionsOut[index].empty():
 		return
-	var data:Dictionary = connectionsOut[index].back()
-	var list:Array = data.unitOut.connectionsOut[data.output]
-#	var list:Array = data.unitIn.connectionsIn[data.input]
+	var data:Dictionary = connectionsOut[index].pop_back()
+	var list:Array = data.unitIn.connectionsIn[data.input]
 	for i in list.size():
 		if list[i] == data:
 			data.unitIn.connectionsIn[data.input].remove(i)
-			connectionsOut[index].erase(data)
-			emit_signal("Disconnect", data)
 			break
+	emit_signal("Disconnect", data)
 
-# removes all connections on "index" input, also on connected unit the connection to here
+
 func InputRemoved(index:int)->void:
 	if !connectionsIn.has(index):
 		return
@@ -162,7 +150,6 @@ func InputRemoved(index:int)->void:
 				break
 	emit_signal("ConnectionsRemoved", list)
 
-# removes all connections on "index" out, also on connected unit the connection to here
 func OutputRemoved(index:int)->void:
 	if !connectionsOut.has(index):
 		return
@@ -175,31 +162,8 @@ func OutputRemoved(index:int)->void:
 			if listIn[i] == data:
 				listIn.remove(i)
 				break
-#		data.unitIn.InputDisconnected(data.input)
-#		data.unitOut.OutputDisconnected(data.output)
 	emit_signal("ConnectionsRemoved", list)
 
-func ConnectionTo(unit:GraphUnit, _disconnect:bool = false)->Dictionary:
-	var result = EMPTY_DATA
-	if connectionsOut.size() > 0:
-		for conn in connectionsOut:
-			for i in connectionsOut[conn].size():
-				if unit == connectionsOut[conn][i]["unitIn"]:
-					result = connectionsOut[conn][i]
-					if _disconnect:
-						result = connectionsOut[conn].pop_at(i)
-						result.unitIn.ConnectionTo(result.unitOut, true)
-					return result
-	if connectionsIn.size() > 0:
-		for conn in connectionsIn:
-			for i in connectionsIn[conn].size():
-				if unit == connectionsIn[conn][i]["unitOut"]:
-					result = connectionsIn[conn][i]
-					if _disconnect:
-						result = connectionsIn[conn].pop_at(i)
-						result.unitOut.ConnectionTo(result.unitIn, true)
-					return result
-	return result
 
 #Check if connection already is existing
 func ConnectionExists(data:Dictionary)->bool:
@@ -223,14 +187,6 @@ func ConnectedOut(data:Dictionary)->void:
 		connectionsOut[entry] = []
 	connectionsOut[entry].append(data)
 	data.unitIn.ConnectedIn(data)
-
-func ClearConnected()->void:
-	for i in connectionsIn.size():
-		InputRemoved(i)
-	for i in connectionsOut.size():
-		OutputRemoved(i)
-	connectionsOut.clear()
-	connectionsIn.clear()
 
 func RemoveSelf()->void:
 # warning-ignore:unassigned_variable

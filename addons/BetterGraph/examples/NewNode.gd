@@ -1,6 +1,6 @@
 extends Button
 
-export var unitScene:PackedScene = preload("res://addons/BetterGraph/GraphUnit/GraphUnitNaked.tscn")
+export var unitScene:PackedScene
 export var graphUnitEditorPath:NodePath
 export var position:Vector2 = Vector2.ZERO
 
