@@ -15,7 +15,7 @@ onready var audioPlayer: = get_node("AudioStreamPlayer")
 
 func _ready():
 	textureButton.texture_normal = usedIMG
-	pass
+	SetShowName(showName)
 
 func _on_TextureButton_pressed()->void:
 	audioPlayer.stream = usedAudio
@@ -26,9 +26,9 @@ func _on_TextureButton_pressed()->void:
 func SetShowName(_show = false)->void:
 	if _show == false:
 		topInfo.visible = false
-		set_state(NORMAL) # states here are reversted... NORMAL is CLEAN and vice versa
+		set_state(CLEAN)
 	else: 
 		topInfo.visible = true
-		set_state(NOT_CLEAN) # states here are reversted... CLEAN is NORMAL and vice versa
+		set_state(NORMAL)
 
 	
