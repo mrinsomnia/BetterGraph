@@ -1,5 +1,6 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
+[ext_resource path="res://addons/BetterGraph/Styles/UnitNormal.tres" type="StyleBox" id=1]
 [ext_resource path="res://addons/BetterGraph/SoundIMGUnit/SoundIMGUnit.gd" type="Script" id=2]
 [ext_resource path="res://addons/BetterGraph/Styles/UnitClean.tres" type="StyleBox" id=3]
 
@@ -37,7 +38,8 @@ inputParentPath = NodePath("VBoxContainer/HBoxContainer/InputParent")
 outputParentPath = NodePath("VBoxContainer/HBoxContainer/OutputParent")
 unitBellyPath = NodePath("VBoxContainer/HBoxContainer/VBoxContainer/Belly")
 panelPath = NodePath("Panel")
-styleList = [ ExtResource( 3 ), ExtResource( 3 ) ]
+styleList = [ ExtResource( 3 ), ExtResource( 3 ), ExtResource( 1 ) ]
+TopPath = NodePath("VBoxContainer/Top")
 TextureButtonPath = NodePath("VBoxContainer/HBoxContainer/VBoxContainer/Belly/TextureButton")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]

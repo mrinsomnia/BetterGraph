@@ -30,6 +30,7 @@ onready var unitBelly: = get_node(unitBellyPath)
 enum {
 	NORMAL,
 	SELECTED,
+	NOT_CLEAN
 }
 
 var state = NORMAL setget set_state
